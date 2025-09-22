@@ -1616,19 +1616,7 @@ class EnterpriseDashboard {
     }
 }
 
-// Global function wrappers for onclick handlers
-function showSection(sectionName) {
-    if (window.enterpriseDashboard) {
-        window.enterpriseDashboard.showSection(sectionName);
-    }
-}
-
-// System Health Functions
-function runSystemCheck() {
-    if (window.enterpriseDashboard) {
-        window.enterpriseDashboard.runSystemCheck();
-    }
-}
+// Global function wrappers will be created in DOMContentLoaded
 
 function optimizeSystem() {
     if (window.enterpriseDashboard) {
@@ -1754,4 +1742,145 @@ function exportReport(reportType) {
 document.addEventListener('DOMContentLoaded', function() {
     window.enterpriseDashboard = new EnterpriseDashboard();
     console.log('Enterprise Dashboard initialized and available globally');
+    
+    // Create global function wrappers for onclick handlers
+    window.showSection = function(sectionName) {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.showSection(sectionName);
+        }
+    };
+
+    // System Health Functions
+    window.runSystemCheck = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.runSystemCheck();
+        }
+    };
+
+    window.optimizeSystem = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.optimizeSystem();
+        }
+    };
+
+    window.cleanupSystem = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.cleanupSystem();
+        }
+    };
+
+    window.generateHealthReport = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.generateHealthReport();
+        }
+    };
+
+    window.runFullDiagnostics = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.runFullDiagnostics();
+        }
+    };
+
+    window.exportHealthReport = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.exportHealthReport();
+        }
+    };
+
+    window.updateHealthMetrics = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.updateHealthMetrics();
+        }
+    };
+
+    // Network Functions
+    window.runNetworkDiagnostics = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.runNetworkDiagnostics();
+        }
+    };
+
+    window.pingHost = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.pingHost();
+        }
+    };
+
+    // Security Functions
+    window.runSecurityScan = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.runSecurityScan();
+        }
+    };
+
+    window.updateFirewall = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.updateFirewall();
+        }
+    };
+
+    // Automation Functions
+    window.createAutomationJob = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.createAutomationJob();
+        }
+    };
+
+    window.runAutomationJob = function(jobId) {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.runAutomationJob(jobId);
+        }
+    };
+
+    // Windows 11 Functions
+    window.runCompatibilityCheck = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.runCompatibilityCheck();
+        }
+    };
+
+    window.createBackup = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.createBackup();
+        }
+    };
+
+    // Active Directory Functions
+    window.listADUsers = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.listADUsers();
+        }
+    };
+
+    window.listADGroups = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.listADGroups();
+        }
+    };
+
+    // Workstation Management Functions
+    window.showSystemInfo = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.showSystemInfo();
+        }
+    };
+
+    window.optimizePerformance = function() {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.optimizePerformance();
+        }
+    };
+
+    // Reporting Functions
+    window.generateReport = function(reportType) {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.generateReport(reportType);
+        }
+    };
+
+    window.exportReport = function(reportType) {
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.exportReport(reportType);
+        }
+    };
 });
