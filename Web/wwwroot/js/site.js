@@ -6,7 +6,7 @@ class EnterpriseDashboard {
         this.refreshInterval = null;
         this.isInitialized = false;
         this.currentSection = 'dashboard';
-        this.apiBaseUrl = 'http://localhost:5001/api';
+        this.apiBaseUrl = 'https://enterprise-toolkit-api.onrender.com/api';
         this.desktopAppRunning = false;
         this.authToken = null;
         this.demoMode = false; // Disable demo mode - make buttons work independently
@@ -20,6 +20,12 @@ class EnterpriseDashboard {
         this.loadInitialData();
         this.isInitialized = true;
         console.log('Enterprise Dashboard initialized successfully');
+        
+        // Ensure dashboard is shown by default
+        setTimeout(() => {
+            this.showSection('dashboard');
+            console.log('Dashboard section activated');
+        }, 100);
     }
 
     initializeCharts() {
