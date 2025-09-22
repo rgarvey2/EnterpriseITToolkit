@@ -5,7 +5,7 @@ const port = 5003;
 
 // Enable CORS for all origins
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:8080', 'https://enterprise-toolkit-web.onrender.com'],
+    origin: ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:8081', 'https://enterprise-toolkit-web.onrender.com'],
     credentials: true
 }));
 
