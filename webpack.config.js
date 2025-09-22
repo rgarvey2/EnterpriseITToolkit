@@ -1,4 +1,5 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = (env, argv) => {
     const isProduction = argv.mode === 'production';
@@ -24,6 +25,25 @@ module.exports = (env, argv) => {
                 }
             ]
         },
+        plugins: [
+            new HtmlWebpackPlugin({
+                template: './Web/wwwroot/index.html',
+                filename: 'index.html',
+                inject: true,
+                minify: isProduction ? {
+                    removeComments: true,
+                    collapseWhitespace: true,
+                    removeRedundantAttributes: true,
+                    useShortDoctype: true,
+                    removeEmptyAttributes: true,
+                    removeStyleLinkTypeAttributes: true,
+                    keepClosingSlash: true,
+                    minifyJS: true,
+                    minifyCSS: true,
+                    minifyURLs: true
+                } : false
+            })
+        ],
         resolve: {
             extensions: ['.js', '.css'],
             alias: {
