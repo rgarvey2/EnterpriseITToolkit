@@ -1,0 +1,30 @@
+services:
+  # API Server
+  api-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "5004:5003"
+    environment:
+      - NODE_ENV=production
+      - PORT=5003
+    networks:
+      - enterprise-network
+
+  # Nginx Web Server with Static Files
+  web-server:
+    image: nginx:alpine
+    ports:
+      - "8082:80"
+    volumes:
+      - ./nginx.simple.conf:/etc/nginx/nginx.conf:ro
+      - ./Web/wwwroot:/usr/share/nginx/html:ro
+    depends_on:
+      - api-server
+    networks:
+      - enterprise-network
+
+networks:
+  enterprise-network:
+    driver: bridge

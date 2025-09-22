@@ -1,39 +1,23 @@
-# Use the official .NET 8 runtime as base image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 5001
+EXPOSE 80
 
-# Use the official .NET 8 SDK for building
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-
-# Copy project files
-COPY ["EnterpriseITToolkit.Web.csproj", "."]
-COPY ["Controllers/", "Controllers/"]
-COPY ["Services/", "Services/"]
-COPY ["Models/", "Models/"]
-COPY ["Data/", "Data/"]
-COPY ["Security/", "Security/"]
-COPY ["Common/", "Common/"]
-COPY ["appsettings.json", "."]
-
-# Restore dependencies
-RUN dotnet restore "EnterpriseITToolkit.Web.csproj"
-
-# Copy everything else and build
+COPY ["Web/EnterpriseITToolkit.Web.csproj", "Web/"]
+RUN dotnet restore "Web/EnterpriseITToolkit.Web.csproj"
 COPY . .
+WORKDIR "/src/Web"
 RUN dotnet build "EnterpriseITToolkit.Web.csproj" -c Release -o /app/build
 
-# Publish the application
 FROM build AS publish
 RUN dotnet publish "EnterpriseITToolkit.Web.csproj" -c Release -o /app/publish
 
-# Final stage/image
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Create logs directory
-RUN mkdir -p /app/Logs
+# Copy static files
+COPY Web/wwwroot/ ./wwwroot/
 
 ENTRYPOINT ["dotnet", "EnterpriseITToolkit.Web.dll"]

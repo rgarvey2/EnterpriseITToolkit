@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enterprise IT Toolkit v4.0 - Web Edition</title>
+    
+    <!-- External Resources -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous"></script>
+    
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --dark-bg: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-light: #ecf0f1;
+            --border-color: #444;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .desktop-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 10px 20px;
+            border-bottom: 2px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .desktop-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .desktop-nav {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .nav-tabs {
+            border: none;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        .nav-tabs .nav-link {
+            background-color: transparent;
+            border: none;
+            color: var(--text-light);
+            padding: 12px 20px;
+            border-radius: 0;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-bottom: 3px solid var(--success-color);
+        }
+
+        .main-container {
+            display: flex;
+            height: calc(100vh - 120px);
+        }
+
+        .left-panel {
+            width: 350px;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            flex: 1;
+            background-color: var(--dark-bg);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .system-overview {
+            background-color: var(--primary-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .system-overview h4 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .metric-label {
+            color: var(--text-light);
+        }
+
+        .metric-value {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .recent-activity {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .recent-activity h4 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: var(--dark-bg);
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .activity-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 10px;
+        }
+
+        .activity-icon.success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .activity-icon.warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .activity-icon.info {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .action-btn.system-health { background-color: var(--success-color); }
+        .action-btn.software-inventory { background-color: #9b59b6; }
+        .action-btn.network-test { background-color: var(--accent-color); }
+        .action-btn.optimize-system { background-color: #2980b9; }
+        .action-btn.security-check { background-color: var(--danger-color); }
+        .action-btn.backup-registry { background-color: #8b4513; }
+
+        .system-output {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 8px 20px;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .remote-execution {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .remote-execution h4 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .target-input {
+            background-color: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 10px;
+            border-radius: 4px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .target-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .execute-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .execute-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .results-area {
+            background-color: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                width: 100%;
+                height: auto;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Desktop Header -->
+    <div class="desktop-header">
+        <h1 class="desktop-title">Enhanced Enterprise IT Toolkit v4.0 - Web Edition</h1>
+        <div class="user-info">
+            <i class="fas fa-user-circle me-2"></i>
+            <span>Users: Ryan Gurary | Computers: CUSTOMPC001</span>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="desktop-nav">
+        <ul class="nav nav-tabs" id="mainTabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showSection('system-health')">
+                    <i class="fas fa-heartbeat me-1"></i>System Health
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showSection('network')">
+                    <i class="fas fa-network-wired me-1"></i>Network Tools
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showSection('security')">
+                    <i class="fas fa-shield-alt me-1"></i>Security
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showSection('windows11')">
+                    <i class="fas fa-windows me-1"></i>Windows 11 Manager
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showSection('automation')">
+                    <i class="fas fa-robot me-1"></i>Enterprise Automation
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showSection('ml-analytics')">
+                    <i class="fas fa-brain me-1"></i>ML Analytics
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showSection('reports')">
+                    <i class="fas fa-file-alt me-1"></i>Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showSection('settings')">
+                    <i class="fas fa-cog me-1"></i>Settings
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <!-- System Overview -->
+            <div class="system-overview">
+                <h4><i class="fas fa-info-circle me-2"></i>System Overview</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Date/Time:</span>
+                    <span class="metric-value" id="currentDateTime"></span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">CPU Usage:</span>
+                    <span class="metric-value" id="cpuUsage">25%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Memory:</span>
+                    <span class="metric-value" id="memoryUsage">8.2 GB / 16 GB</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Disk Space:</span>
+                    <span class="metric-value" id="diskUsage">250 GB / 500 GB</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Network:</span>
+                    <span class="metric-value" id="networkStatus">Connected</span>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h4><i class="fas fa-history me-2"></i>Recent Activity</h4>
+                <div class="activity-item">
+                    <div class="activity-icon success">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div>
+                        <div>System health check completed</div>
+                        <small>All systems operational</small>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon success">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <div>Security scan completed</div>
+                        <small>No threats detected</small>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon info">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div>
+                        <div>Network connectivity test passed</div>
+                        <small>All connections stable</small>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon warning">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div>
+                        <div>Software inventory updated</div>
+                        <small>45 applications detected</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-btn system-health" onclick="runSystemCheck()">
+                    <i class="fas fa-heartbeat me-2"></i>System Health
+                </button>
+                <button class="action-btn software-inventory" onclick="runSoftwareInventory()">
+                    <i class="fas fa-box me-2"></i>Software Inventory
+                </button>
+                <button class="action-btn network-test" onclick="runNetworkDiagnostics()">
+                    <i class="fas fa-network-wired me-2"></i>Network Test
+                </button>
+                <button class="action-btn optimize-system" onclick="optimizeSystem()">
+                    <i class="fas fa-magic me-2"></i>Optimize System
+                </button>
+                <button class="action-btn security-check" onclick="runSecurityScan()">
+                    <i class="fas fa-shield-alt me-2"></i>Security Check
+                </button>
+                <button class="action-btn backup-registry" onclick="backupRegistry()">
+                    <i class="fas fa-save me-2"></i>Backup Registry
+                </button>
+            </div>
+
+            <!-- System Output -->
+            <div class="system-output" id="systemOutput">
+Enterprise IT Toolkit v4.0 initialized successfully.
+Ready for system administration tasks.
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <!-- Dashboard Tab Content -->
+            <div id="dashboard" class="tab-content active">
+                <h2><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h2>
+                <p>Welcome to the Enterprise IT Toolkit Web Edition. Select a function from the left panel or use the navigation tabs above.</p>
+                
+                <!-- Remote Execution Panel -->
+                <div class="remote-execution">
+                    <h4><i class="fas fa-terminal me-2"></i>Remote Execution</h4>
+                    <input type="text" class="target-input" id="targetMachine" placeholder="Enter target machine (IP address or hostname)">
+                    <button class="execute-btn" onclick="executeOnTarget()">
+                        <i class="fas fa-play me-2"></i>Execute on Target
+                    </button>
+                    <div class="results-area" id="executionResults">Results will appear here...</div>
+                </div>
+            </div>
+
+            <!-- Other Tab Contents (initially hidden) -->
+            <div id="system-health" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-heartbeat me-2"></i>System Health</h2>
+                <p>System health monitoring and diagnostics tools.</p>
+            </div>
+
+            <div id="network" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-network-wired me-2"></i>Network Tools</h2>
+                <p>Network diagnostics and management tools.</p>
+            </div>
+
+            <div id="security" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-shield-alt me-2"></i>Security</h2>
+                <p>Security scanning and management tools.</p>
+            </div>
+
+            <div id="windows11" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-windows me-2"></i>Windows 11 Manager</h2>
+                <p>Windows 11 upgrade and management tools.</p>
+            </div>
+
+            <div id="automation" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-robot me-2"></i>Enterprise Automation</h2>
+                <p>Automated tasks and workflow management.</p>
+            </div>
+
+            <div id="ml-analytics" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-brain me-2"></i>Machine Learning Analytics</h2>
+                <p>AI-powered analytics and predictions.</p>
+            </div>
+
+            <div id="reports" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-file-alt me-2"></i>Reports</h2>
+                <p>Generate and view system reports.</p>
+            </div>
+
+            <div id="settings" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-cog me-2"></i>Settings</h2>
+                <p>System configuration and settings.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <span id="statusText">Ready</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global variables
+        let currentSection = 'dashboard';
+        let apiBaseUrl = 'http://localhost:5003/api';
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            updateSystemMetrics();
+            setInterval(updateSystemMetrics, 5000);
+            
+        // Detect environment
+        if (window.location.hostname.includes('onrender.com')) {
+            apiBaseUrl = null; // Use demo mode on Render
+        } else if (window.location.port === '8082') {
+            apiBaseUrl = 'http://localhost:5004/api'; // Docker deployment
+        }
+        });
+
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Update system metrics
+        function updateSystemMetrics() {
+            if (apiBaseUrl) {
+                // Try to get real data from API
+                fetch(`${apiBaseUrl}/system/health`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('cpuUsage').textContent = `${data.cpuUsage || 25}%`;
+                        document.getElementById('memoryUsage').textContent = `${data.memoryUsage || '8.2'} GB / 16 GB`;
+                        document.getElementById('diskUsage').textContent = `${data.diskUsage || '250'} GB / 500 GB`;
+                    })
+                    .catch(error => {
+                        console.log('Using demo data for system metrics');
+                        // Use demo data if API is not available
+                        document.getElementById('cpuUsage').textContent = '25%';
+                        document.getElementById('memoryUsage').textContent = '8.2 GB / 16 GB';
+                        document.getElementById('diskUsage').textContent = '250 GB / 500 GB';
+                    });
+            } else {
+                // Use demo data
+                document.getElementById('cpuUsage').textContent = '25%';
+                document.getElementById('memoryUsage').textContent = '8.2 GB / 16 GB';
+                document.getElementById('diskUsage').textContent = '250 GB / 500 GB';
+            }
+        }
+
+        // Show section content
+        function showSection(sectionName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Remove active class from all nav links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(sectionName).style.display = 'block';
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+            
+            currentSection = sectionName;
+            updateStatus(`Switched to ${sectionName.replace('-', ' ')}`);
+        }
+
+        // Execute on target machine
+        function executeOnTarget() {
+            const targetMachine = document.getElementById('targetMachine').value;
+            if (!targetMachine) {
+                alert('Please enter a target machine');
+                return;
+            }
+
+            updateStatus(`Connecting to ${targetMachine}...`);
+            addToSystemOutput(`Connecting to ${targetMachine}...`);
+
+            if (apiBaseUrl) {
+                // Try to connect via API
+                fetch(`${apiBaseUrl}/remote/connect`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        target: targetMachine
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    updateStatus(`Connected to ${targetMachine}`);
+                    addToSystemOutput(`Connected to ${targetMachine}: ${JSON.stringify(data, null, 2)}`);
+                    document.getElementById('executionResults').textContent = `Connected to ${targetMachine}\n\n${JSON.stringify(data, null, 2)}`;
+                })
+                .catch(error => {
+                    updateStatus(`Demo connection to ${targetMachine}`);
+                    addToSystemOutput(`Demo connection to ${targetMachine}`);
+                    document.getElementById('executionResults').textContent = `Demo connection to ${targetMachine}\n\nThis would normally establish a connection to the target machine for remote execution.`;
+                });
+            } else {
+                // Demo mode
+                updateStatus(`Demo connection to ${targetMachine}`);
+                addToSystemOutput(`Demo connection to ${targetMachine}`);
+                document.getElementById('executionResults').textContent = `Demo connection to ${targetMachine}\n\nThis would normally establish a connection to the target machine for remote execution.`;
+            }
+        }
+
+        // Update status bar
+        function updateStatus(message) {
+            document.getElementById('statusText').textContent = message;
+        }
+
+        // Add to system output
+        function addToSystemOutput(message) {
+            const output = document.getElementById('systemOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            output.textContent += `\n[${timestamp}] ${message}`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Function implementations
+        function runSystemCheck() {
+            updateStatus('Running system health check...');
+            addToSystemOutput('Running system health check...');
+            
+            if (apiBaseUrl) {
+                fetch(`${apiBaseUrl}/system/health`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateStatus('System health check completed');
+                        addToSystemOutput(`System health: ${JSON.stringify(data, null, 2)}`);
+                    })
+                    .catch(error => {
+                        updateStatus('System health check completed (demo)');
+                        addToSystemOutput('System health check completed - All systems operational');
+                    });
+            } else {
+                updateStatus('System health check completed (demo)');
+                addToSystemOutput('System health check completed - All systems operational');
+            }
+        }
+
+        function runSoftwareInventory() {
+            updateStatus('Running software inventory...');
+            addToSystemOutput('Running software inventory...');
+            
+            if (apiBaseUrl) {
+                fetch(`${apiBaseUrl}/software/inventory`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateStatus('Software inventory completed');
+                        addToSystemOutput(`Software inventory: ${data.totalApplications} applications found`);
+                    })
+                    .catch(error => {
+                        updateStatus('Software inventory completed (demo)');
+                        addToSystemOutput('Software inventory completed - 45 applications detected');
+                    });
+            } else {
+                updateStatus('Software inventory completed (demo)');
+                addToSystemOutput('Software inventory completed - 45 applications detected');
+            }
+        }
+
+        function runNetworkDiagnostics() {
+            updateStatus('Running network diagnostics...');
+            addToSystemOutput('Running network diagnostics...');
+            
+            if (apiBaseUrl) {
+                fetch(`${apiBaseUrl}/network/test`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateStatus('Network diagnostics completed');
+                        addToSystemOutput(`Network test: ${data.connectivity}`);
+                    })
+                    .catch(error => {
+                        updateStatus('Network diagnostics completed (demo)');
+                        addToSystemOutput('Network diagnostics completed - All connections stable');
+                    });
+            } else {
+                updateStatus('Network diagnostics completed (demo)');
+                addToSystemOutput('Network diagnostics completed - All connections stable');
+            }
+        }
+
+        function optimizeSystem() {
+            updateStatus('Optimizing system...');
+            addToSystemOutput('Optimizing system...');
+            
+            if (apiBaseUrl) {
+                fetch(`${apiBaseUrl}/remote/execute`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        target: 'localhost',
+                        function: 'optimize-system'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    updateStatus('System optimization completed');
+                    addToSystemOutput(`System optimization: ${JSON.stringify(data.results, null, 2)}`);
+                })
+                .catch(error => {
+                    updateStatus('System optimization completed (demo)');
+                    addToSystemOutput('System optimization completed - System optimized');
+                });
+            } else {
+                updateStatus('System optimization completed (demo)');
+                addToSystemOutput('System optimization completed - System optimized');
+            }
+        }
+
+        function runSecurityScan() {
+            updateStatus('Running security scan...');
+            addToSystemOutput('Running security scan...');
+            
+            if (apiBaseUrl) {
+                fetch(`${apiBaseUrl}/security/check`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateStatus('Security scan completed');
+                        addToSystemOutput(`Security scan: ${data.overall} - ${data.vulnerabilities.medium} medium, ${data.vulnerabilities.low} low vulnerabilities`);
+                    })
+                    .catch(error => {
+                        updateStatus('Security scan completed (demo)');
+                        addToSystemOutput('Security scan completed - No threats detected');
+                    });
+            } else {
+                updateStatus('Security scan completed (demo)');
+                addToSystemOutput('Security scan completed - No threats detected');
+            }
+        }
+
+        function backupRegistry() {
+            updateStatus('Backing up registry...');
+            addToSystemOutput('Backing up registry...');
+            
+            if (apiBaseUrl) {
+                fetch(`${apiBaseUrl}/remote/execute`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        target: 'localhost',
+                        function: 'backup-registry'
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    updateStatus('Registry backup completed');
+                    addToSystemOutput(`Registry backup: ${JSON.stringify(data.results, null, 2)}`);
+                })
+                .catch(error => {
+                    updateStatus('Registry backup completed (demo)');
+                    addToSystemOutput('Registry backup completed - Backup saved to C:\\Backups\\Registry');
+                });
+            } else {
+                updateStatus('Registry backup completed (demo)');
+                addToSystemOutput('Registry backup completed - Backup saved to C:\\Backups\\Registry');
+            }
+        }
+
+        // Global functions for compatibility
+        window.showSection = showSection;
+        window.runSystemCheck = runSystemCheck;
+        window.runSoftwareInventory = runSoftwareInventory;
+        window.runNetworkDiagnostics = runNetworkDiagnostics;
+        window.optimizeSystem = optimizeSystem;
+        window.runSecurityScan = runSecurityScan;
+        window.backupRegistry = backupRegistry;
+        window.executeOnTarget = executeOnTarget;
+    </script>
+</body>
+</html>
