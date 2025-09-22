@@ -256,6 +256,18 @@ app.listen(port, () => {
     console.log(`\n🔐 Test credentials: admin / admin123`);
 });
 
+// Handle specific endpoints that might be requested
+app.get('/api/netif', (req, res) => {
+    console.log('Network interface endpoint requested');
+    res.json({
+        interfaces: [
+            { name: 'Ethernet', status: 'Connected', ip: '192.168.1.100' },
+            { name: 'Wi-Fi', status: 'Connected', ip: '192.168.1.101' },
+            { name: 'Bluetooth', status: 'Available', ip: 'N/A' }
+        ]
+    });
+});
+
 // Handle any missing endpoints to prevent 403 errors
 app.get('/api/*', (req, res) => {
     console.log('Missing endpoint requested:', req.path);
@@ -269,6 +281,7 @@ app.get('/api/*', (req, res) => {
             'GET /api/system/health',
             'GET /api/system/performance',
             'GET /api/network/adapters',
+            'GET /api/netif',
             'POST /api/remote/execute',
             'POST /api/remote/connect',
             'GET /api/software/inventory',
