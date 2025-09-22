@@ -3,11 +3,16 @@ const path = require('path');
 const app = express();
 const port = 8081;
 
-// Serve static files from current directory
-app.use(express.static('.'));
+// Serve static files from Web/wwwroot directory
+app.use(express.static('./Web/wwwroot'));
+
+// Serve the desktop-style HTML file as default
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Web/wwwroot/desktop-style.html'));
+});
 
 // Serve the test HTML file
-app.get('/', (req, res) => {
+app.get('/test', (req, res) => {
     res.sendFile(path.join(__dirname, 'test-api-simple.html'));
 });
 
