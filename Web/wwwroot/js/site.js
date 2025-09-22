@@ -6,7 +6,7 @@ class EnterpriseDashboard {
         this.refreshInterval = null;
         this.isInitialized = false;
         this.currentSection = 'dashboard';
-        this.apiBaseUrl = 'https://enterprise-toolkit-api.onrender.com/api';
+        this.apiBaseUrl = 'http://localhost:5001/api';
         this.desktopAppRunning = false;
         this.authToken = null;
         this.demoMode = false; // Disable demo mode - make buttons work independently
@@ -535,11 +535,36 @@ class EnterpriseDashboard {
     }
 
     async authenticate() {
-        // Skip API authentication and go directly to demo mode
-        // This prevents CORS errors and ensures the app works independently
-        console.log('Skipping API authentication, using demo mode');
-        this.desktopAppRunning = false;
-        this.useDemoMode();
+        try {
+            // Try to authenticate with the local API server
+            const response = await fetch(`${this.apiBaseUrl}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    username: this.getStoredUsername(),
+                    password: this.getStoredPassword()
+                })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                this.authToken = result.sessionToken;
+                this.desktopAppRunning = true;
+                console.log('Authentication successful - API server connected');
+                this.showNotification('API server connected successfully!', 'success');
+            } else {
+                console.warn('Authentication failed, using demo mode');
+                this.desktopAppRunning = false;
+                this.useDemoMode();
+            }
+        } catch (error) {
+            console.warn('API server not available, using demo mode:', error);
+            this.desktopAppRunning = false;
+            this.useDemoMode();
+        }
     }
 
     getStoredUsername() {
