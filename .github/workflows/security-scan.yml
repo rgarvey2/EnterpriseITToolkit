@@ -4,13 +4,15 @@
 name: "Security Scanning"
 
 on:
-  push:
-    branches: [ "main", "develop" ]
-  pull_request:
-    branches: [ "main" ]
-  schedule:
-    # Run security scans daily at 3 AM UTC
-    - cron: '0 3 * * *'
+  # Temporarily disabled to prevent email spam
+  # push:
+  #   branches: [ "main", "develop" ]
+  # pull_request:
+  #   branches: [ "main" ]
+  # schedule:
+  #   # Run security scans daily at 3 AM UTC
+  #   - cron: '0 3 * * *'
+  workflow_dispatch: # Allow manual runs only
 
 jobs:
   # SAST (Static Application Security Testing)

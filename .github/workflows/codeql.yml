@@ -4,13 +4,15 @@
 name: "CodeQL Security Analysis"
 
 on:
-  push:
-    branches: [ "main", "develop" ]
-  pull_request:
-    branches: [ "main" ]
-  schedule:
-    # Run security analysis daily at 2 AM UTC
-    - cron: '0 2 * * *'
+  # Temporarily disabled to prevent email spam
+  # push:
+  #   branches: [ "main", "develop" ]
+  # pull_request:
+  #   branches: [ "main" ]
+  # schedule:
+  #   # Run security analysis daily at 2 AM UTC
+  #   - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual runs only
 
 jobs:
   analyze:

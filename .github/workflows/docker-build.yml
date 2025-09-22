@@ -1,10 +1,12 @@
 name: Enterprise IT Toolkit - Docker Build & Deploy
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
+  # Temporarily disabled to prevent email spam
+  # push:
+  #   branches: [ main, develop ]
+  # pull_request:
+  #   branches: [ main ]
+  workflow_dispatch: # Allow manual runs only
 
 env:
   REGISTRY: ghcr.io

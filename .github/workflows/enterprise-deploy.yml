@@ -1,12 +1,14 @@
 name: Enterprise IT Toolkit - Complete CI/CD Pipeline
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '0 2 * * *'  # Daily security scan at 2 AM
+  # Temporarily disabled to prevent email spam
+  # push:
+  #   branches: [ main, develop ]
+  # pull_request:
+  #   branches: [ main ]
+  # schedule:
+  #   - cron: '0 2 * * *'  # Daily security scan at 2 AM
+  workflow_dispatch: # Allow manual runs only
 
 env:
   REGISTRY: ghcr.io
