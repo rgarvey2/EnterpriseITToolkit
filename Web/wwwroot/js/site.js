@@ -1383,12 +1383,142 @@ class EnterpriseDashboard {
     }
 }
 
+// Global function wrappers for onclick handlers
 function showSection(sectionName) {
     if (window.enterpriseDashboard) {
         window.enterpriseDashboard.showSection(sectionName);
     }
 }
 
+// System Health Functions
+function runSystemCheck() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.runSystemCheck();
+    }
+}
+
+function optimizeSystem() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.optimizeSystem();
+    }
+}
+
+function cleanupSystem() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.cleanupSystem();
+    }
+}
+
+function generateHealthReport() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.generateHealthReport();
+    }
+}
+
+function runFullDiagnostics() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.runFullDiagnostics();
+    }
+}
+
+function exportHealthReport() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.exportHealthReport();
+    }
+}
+
+// Network Functions
+function runNetworkDiagnostics() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.runNetworkDiagnostics();
+    }
+}
+
+function pingHost() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.pingHost();
+    }
+}
+
+// Security Functions
+function runSecurityScan() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.runSecurityScan();
+    }
+}
+
+function updateFirewall() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.updateFirewall();
+    }
+}
+
+// Automation Functions
+function createAutomationJob() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.createAutomationJob();
+    }
+}
+
+function runAutomationJob(jobId) {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.runAutomationJob(jobId);
+    }
+}
+
+// Windows 11 Functions
+function runCompatibilityCheck() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.runCompatibilityCheck();
+    }
+}
+
+function createBackup() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.createBackup();
+    }
+}
+
+// Active Directory Functions
+function listADUsers() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.listADUsers();
+    }
+}
+
+function listADGroups() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.listADGroups();
+    }
+}
+
+// Workstation Functions
+function showSystemInfo() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.showSystemInfo();
+    }
+}
+
+function optimizePerformance() {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.optimizePerformance();
+    }
+}
+
+// Reporting Functions
+function generateReport(reportType) {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.generateReport(reportType);
+    }
+}
+
+function exportReport(reportType) {
+    if (window.enterpriseDashboard) {
+        window.enterpriseDashboard.exportReport(reportType);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     window.enterpriseDashboard = new EnterpriseDashboard();
+    console.log('Enterprise Dashboard initialized and available globally');
 });

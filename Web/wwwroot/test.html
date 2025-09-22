@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>JavaScript Functionality Test</h1>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Test Buttons</h3>
+                <button class="btn btn-primary" onclick="testFunction()">Test Function</button>
+                <button class="btn btn-success" onclick="testDashboard()">Test Dashboard</button>
+                <button class="btn btn-warning" onclick="testNotification()">Test Notification</button>
+            </div>
+            <div class="col-md-6">
+                <h3>Console Output</h3>
+                <div id="console-output" class="bg-dark text-light p-3" style="height: 200px; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const output = document.getElementById('console-output');
+            output.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + message + '</div>';
+            output.scrollTop = output.scrollHeight;
+            console.log(message);
+        }
+
+        function testFunction() {
+            log('Test function called successfully!');
+        }
+
+        function testDashboard() {
+            if (window.enterpriseDashboard) {
+                log('Enterprise Dashboard found!');
+                window.enterpriseDashboard.showNotification('Test notification from dashboard!', 'success');
+            } else {
+                log('ERROR: Enterprise Dashboard not found!');
+            }
+        }
+
+        function testNotification() {
+            if (window.enterpriseDashboard) {
+                window.enterpriseDashboard.showNotification('This is a test notification!', 'info');
+                log('Notification sent via dashboard');
+            } else {
+                log('ERROR: Cannot send notification - dashboard not available');
+            }
+        }
+
+        // Test when page loads
+        window.addEventListener('load', function() {
+            log('Page loaded');
+            if (window.enterpriseDashboard) {
+                log('Enterprise Dashboard is available');
+            } else {
+                log('WARNING: Enterprise Dashboard not available');
+            }
+        });
+
+        // Test after a delay
+        setTimeout(function() {
+            log('Delayed test - checking for dashboard...');
+            if (window.enterpriseDashboard) {
+                log('Enterprise Dashboard found after delay');
+            } else {
+                log('ERROR: Enterprise Dashboard still not available after delay');
+            }
+        }, 2000);
+    </script>
+
+    <!-- Load the main JavaScript -->
+    <script src="/dist/main.7f4dffde6f01dd8c35ce.js"></script>
+</body>
+</html>
