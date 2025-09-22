@@ -21,7 +21,7 @@ services:
   # API Backend Service
   - type: web
     name: enterprise-toolkit-api
-    env: dotnet
+    runtime: dotnet
     buildCommand: dotnet restore && dotnet publish -c Release -o ./publish
     startCommand: dotnet ./publish/EnterpriseITToolkit.dll
     plan: starter
@@ -53,7 +53,7 @@ services:
   # Background Worker Service
   - type: worker
     name: enterprise-toolkit-worker
-    env: dotnet
+    runtime: dotnet
     buildCommand: dotnet restore && dotnet publish -c Release -o ./publish
     startCommand: dotnet ./publish/EnterpriseITToolkit.Worker.dll
     plan: starter
