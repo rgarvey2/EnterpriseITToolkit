@@ -1,0 +1,46 @@
+# Simple build workflow for Enterprise IT Toolkit
+# This workflow only runs on manual trigger to avoid spam
+
+name: "Simple Build Test"
+
+on:
+  workflow_dispatch: # Manual trigger only
+
+jobs:
+  build-test:
+    name: Build Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build web interface
+      run: npm run build
+
+    - name: Check build output
+      run: |
+        if [ -d "Web/wwwroot/dist" ]; then
+          echo "✅ Build successful - dist directory exists"
+          ls -la Web/wwwroot/dist/
+        else
+          echo "❌ Build failed - dist directory not found"
+          exit 1
+        fi
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: web-build
+        path: Web/wwwroot/dist/
+        retention-days: 7
