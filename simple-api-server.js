@@ -321,7 +321,7 @@ app.head('/', (req, res) => {
 });
 
 // Handle any missing endpoints to prevent 403 errors
-app.get('/api/*', (req, res) => {
+app.get('*', (req, res) => {
     console.log('Missing endpoint requested:', req.path);
     res.json({
         error: 'Endpoint not found',
@@ -334,6 +334,10 @@ app.get('/api/*', (req, res) => {
             'GET /api/system/performance',
             'GET /api/network/adapters',
             'GET /api/netif',
+            'GET /api/phpadmin/status',
+            'GET /api/database/status',
+            'GET /api/cache/status',
+            'GET /api/monitoring/status',
             'POST /api/remote/execute',
             'POST /api/remote/connect',
             'GET /api/software/inventory',
