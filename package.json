@@ -28,7 +28,7 @@
     "webpack": "^5.89.0",
     "webpack-dev-server": "^4.15.1",
     "terser-webpack-plugin": "^5.3.9",
-    "css-minimizer-webpack-plugin": "^5.0.1",
+    "css-minimizer-webpack-plugin": "^7.0.2",
     "mini-css-extract-plugin": "^2.7.6",
     "css-loader": "^6.8.1",
     "postcss-loader": "^7.3.3",
