@@ -255,3 +255,25 @@ app.listen(port, () => {
     console.log(`  • GET /api/security/check`);
     console.log(`\n🔐 Test credentials: admin / admin123`);
 });
+
+// Handle any missing endpoints to prevent 403 errors
+app.get('/api/*', (req, res) => {
+    console.log('Missing endpoint requested:', req.path);
+    res.json({
+        error: 'Endpoint not found',
+        path: req.path,
+        availableEndpoints: [
+            'GET /',
+            'POST /api/auth/login',
+            'GET /health',
+            'GET /api/system/health',
+            'GET /api/system/performance',
+            'GET /api/network/adapters',
+            'POST /api/remote/execute',
+            'POST /api/remote/connect',
+            'GET /api/software/inventory',
+            'GET /api/network/test',
+            'GET /api/security/check'
+        ]
+    });
+});
