@@ -580,7 +580,7 @@ Ready for system administration tasks.
     <script>
         // Global variables
         let currentSection = 'dashboard';
-        let apiBaseUrl = 'http://localhost:5004/api'; // Docker API server
+        let apiBaseUrl = '/api'; // Use relative path through Nginx proxy
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
@@ -593,8 +593,8 @@ Ready for system administration tasks.
         if (window.location.hostname.includes('onrender.com')) {
             apiBaseUrl = null; // Use demo mode on Render
         } else if (window.location.port === '8082' || window.location.hostname === 'localhost') {
-            // Docker deployment or local development
-            apiBaseUrl = 'http://localhost:5004/api'; // Docker API server
+            // Docker deployment or local development - use relative path through Nginx
+            apiBaseUrl = '/api'; // Nginx proxy to Docker API server
         }
         
         console.log('Environment detected:', {
@@ -632,7 +632,7 @@ Ready for system administration tasks.
                 return;
             }
             
-            fetch(`${apiBaseUrl.replace('/api', '')}/health`)
+            fetch('/health')
                 .then(response => {
                     if (response.ok) {
                         updateConnectionStatus('connected', 'Connected to Docker API');
