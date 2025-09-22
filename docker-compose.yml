@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   enterprise-api:
     build:
@@ -15,8 +13,6 @@ services:
     depends_on:
       - enterprise-postgres
       - enterprise-redis
-    networks:
-      - enterprise-network
     restart: unless-stopped
 
   enterprise-postgres:
@@ -27,11 +23,8 @@ services:
       - POSTGRES_PASSWORD=enterprise_pass123
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./Docker/init-scripts:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
-    networks:
-      - enterprise-network
     restart: unless-stopped
 
   enterprise-redis:
@@ -40,29 +33,8 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    networks:
-      - enterprise-network
-    restart: unless-stopped
-
-  enterprise-php-admin:
-    image: phpmyadmin/phpmyadmin
-    environment:
-      - PMA_HOST=enterprise-postgres
-      - PMA_PORT=5432
-      - PMA_USER=enterprise_user
-      - PMA_PASSWORD=enterprise_pass123
-    ports:
-      - "8080:80"
-    depends_on:
-      - enterprise-postgres
-    networks:
-      - enterprise-network
     restart: unless-stopped
 
 volumes:
   postgres_data:
   redis_data:
-
-networks:
-  enterprise-network:
-    driver: bridge

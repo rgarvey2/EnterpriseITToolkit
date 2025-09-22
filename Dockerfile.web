@@ -16,7 +16,6 @@ COPY ["Data/", "Data/"]
 COPY ["Security/", "Security/"]
 COPY ["Common/", "Common/"]
 COPY ["appsettings.json", "."]
-COPY ["appsettings.Development.json", "."]
 
 # Restore dependencies
 RUN dotnet restore "EnterpriseITToolkit.Web.csproj"

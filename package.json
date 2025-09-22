@@ -40,7 +40,9 @@
   "dependencies": {
     "bootstrap": "^5.3.2",
     "chart.js": "^4.4.0",
+    "cors": "^2.8.5",
     "css-loader": "^6.8.1",
+    "express": "^5.1.0",
     "html-webpack-plugin": "^5.6.4",
     "style-loader": "^3.3.3",
     "webpack-cli": "^5.1.4"

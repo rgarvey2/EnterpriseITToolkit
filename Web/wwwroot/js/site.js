@@ -6,11 +6,28 @@ class EnterpriseDashboard {
         this.refreshInterval = null;
         this.isInitialized = false;
         this.currentSection = 'dashboard';
-        this.apiBaseUrl = 'http://localhost:5001/api';
+        // Detect environment and set appropriate API URL
+        this.apiBaseUrl = this.detectApiUrl();
         this.desktopAppRunning = false;
         this.authToken = null;
         this.demoMode = false; // Disable demo mode - make buttons work independently
         this.init();
+    }
+
+    detectApiUrl() {
+        // Check if we're running on localhost (development)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'http://localhost:5001/api';
+        }
+        
+        // Check if we're running on Render (production)
+        if (window.location.hostname.includes('onrender.com')) {
+            // For now, use demo mode on Render since we don't have the API deployed there
+            return null; // This will trigger demo mode
+        }
+        
+        // Default to localhost for other environments
+        return 'http://localhost:5001/api';
     }
 
     init() {
@@ -535,8 +552,16 @@ class EnterpriseDashboard {
     }
 
     async authenticate() {
+        // If no API URL is configured, go directly to demo mode
+        if (!this.apiBaseUrl) {
+            console.log('No API URL configured, using demo mode');
+            this.desktopAppRunning = false;
+            this.useDemoMode();
+            return;
+        }
+
         try {
-            // Try to authenticate with the local API server
+            // Try to authenticate with the API server
             const response = await fetch(`${this.apiBaseUrl}/auth/login`, {
                 method: 'POST',
                 headers: {
