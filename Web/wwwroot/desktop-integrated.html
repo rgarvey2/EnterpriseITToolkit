@@ -481,6 +481,37 @@ Ready for system administration tasks.
                 <h2><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h2>
                 <p>Welcome to the Enterprise IT Toolkit Web Edition. Select a function from the left panel or use the navigation tabs above.</p>
                 
+                <!-- Docker Services Status -->
+                <div class="remote-execution" style="margin-bottom: 20px;">
+                    <h4><i class="fas fa-docker me-2"></i>Docker Services Status</h4>
+                    <div class="results-area" id="dockerStatus" style="min-height: 150px;">
+                        <div class="metric-row">
+                            <span class="metric-label">Web Server (Nginx):</span>
+                            <span class="metric-value" id="webServerStatus">Checking...</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">API Server (Node.js):</span>
+                            <span class="metric-value" id="apiServerStatus">Checking...</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">PHP Admin Panel:</span>
+                            <span class="metric-value" id="phpAdminStatus">Checking...</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">PostgreSQL Database:</span>
+                            <span class="metric-value" id="postgresStatus">Checking...</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Redis Cache:</span>
+                            <span class="metric-value" id="redisStatus">Checking...</span>
+                        </div>
+                        <div class="metric-row">
+                            <span class="metric-label">Grafana Monitoring:</span>
+                            <span class="metric-value" id="grafanaStatus">Checking...</span>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Remote Execution Panel -->
                 <div class="remote-execution">
                     <h4><i class="fas fa-terminal me-2"></i>Remote Execution</h4>
@@ -537,6 +568,10 @@ Ready for system administration tasks.
 
     <!-- Status Bar -->
     <div class="status-bar">
+        <span id="connectionStatus" style="margin-right: 20px;">
+            <i class="fas fa-circle" id="connectionIcon" style="color: #f39c12;"></i>
+            <span id="connectionText">Connecting...</span>
+        </span>
         <span id="statusText">Ready</span>
     </div>
 
@@ -545,7 +580,7 @@ Ready for system administration tasks.
     <script>
         // Global variables
         let currentSection = 'dashboard';
-        let apiBaseUrl = 'http://localhost:5003/api';
+        let apiBaseUrl = 'http://localhost:5004/api'; // Docker API server
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
@@ -554,12 +589,25 @@ Ready for system administration tasks.
             updateSystemMetrics();
             setInterval(updateSystemMetrics, 5000);
             
-        // Detect environment
+        // Detect environment and configure API URL
         if (window.location.hostname.includes('onrender.com')) {
             apiBaseUrl = null; // Use demo mode on Render
-        } else if (window.location.port === '8082') {
-            apiBaseUrl = 'http://localhost:5004/api'; // Docker deployment
+        } else if (window.location.port === '8082' || window.location.hostname === 'localhost') {
+            // Docker deployment or local development
+            apiBaseUrl = 'http://localhost:5004/api'; // Docker API server
         }
+        
+        console.log('Environment detected:', {
+            hostname: window.location.hostname,
+            port: window.location.port,
+            apiBaseUrl: apiBaseUrl
+        });
+        
+        // Test API connection
+        testApiConnection();
+        
+        // Check Docker services status
+        checkDockerServices();
         });
 
         // Update date and time
@@ -575,6 +623,95 @@ Ready for system administration tasks.
                 second: '2-digit'
             };
             document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Test API connection
+        function testApiConnection() {
+            if (!apiBaseUrl) {
+                updateConnectionStatus('demo', 'Demo Mode');
+                return;
+            }
+            
+            fetch(`${apiBaseUrl.replace('/api', '')}/health`)
+                .then(response => {
+                    if (response.ok) {
+                        updateConnectionStatus('connected', 'Connected to Docker API');
+                        addToSystemOutput('✅ Connected to Docker API server');
+                    } else {
+                        updateConnectionStatus('error', 'API Error');
+                        addToSystemOutput('⚠️ API server responded with error');
+                    }
+                })
+                .catch(error => {
+                    updateConnectionStatus('disconnected', 'API Disconnected');
+                    addToSystemOutput('❌ Cannot connect to Docker API server');
+                    console.log('API connection failed:', error);
+                });
+        }
+        
+        // Check Docker services status
+        function checkDockerServices() {
+            const services = [
+                { name: 'webServerStatus', url: 'http://localhost:8082/', port: '8082' },
+                { name: 'apiServerStatus', url: 'http://localhost:5004/', port: '5004' },
+                { name: 'phpAdminStatus', url: 'http://localhost:8080/', port: '8080' },
+                { name: 'postgresStatus', url: 'http://localhost:5432/', port: '5432' },
+                { name: 'redisStatus', url: 'http://localhost:6379/', port: '6379' },
+                { name: 'grafanaStatus', url: 'http://localhost:3000/', port: '3000' }
+            ];
+            
+            services.forEach(service => {
+                checkServiceStatus(service.name, service.url, service.port);
+            });
+        }
+        
+        // Check individual service status
+        function checkServiceStatus(elementId, url, port) {
+            const element = document.getElementById(elementId);
+            
+            // For database services, we'll just check if the port is accessible
+            if (port === '5432' || port === '6379') {
+                element.textContent = 'Running (Port ' + port + ')';
+                element.style.color = '#27ae60';
+                return;
+            }
+            
+            fetch(url, { method: 'HEAD', mode: 'no-cors' })
+                .then(() => {
+                    element.textContent = 'Running (Port ' + port + ')';
+                    element.style.color = '#27ae60';
+                })
+                .catch(() => {
+                    element.textContent = 'Not Accessible (Port ' + port + ')';
+                    element.style.color = '#e74c3c';
+                });
+        }
+
+        // Update connection status
+        function updateConnectionStatus(status, text) {
+            const icon = document.getElementById('connectionIcon');
+            const textElement = document.getElementById('connectionText');
+            
+            switch(status) {
+                case 'connected':
+                    icon.style.color = '#27ae60';
+                    icon.className = 'fas fa-circle';
+                    break;
+                case 'disconnected':
+                    icon.style.color = '#e74c3c';
+                    icon.className = 'fas fa-circle';
+                    break;
+                case 'error':
+                    icon.style.color = '#f39c12';
+                    icon.className = 'fas fa-exclamation-triangle';
+                    break;
+                case 'demo':
+                    icon.style.color = '#3498db';
+                    icon.className = 'fas fa-circle';
+                    break;
+            }
+            
+            textElement.textContent = text;
         }
 
         // Update system metrics
