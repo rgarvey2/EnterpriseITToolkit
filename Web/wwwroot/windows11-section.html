@@ -1,0 +1,138 @@
+<!-- Windows 11 Upgrade Modules Section -->
+<div id="windows11" class="content-section">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2 enterprise-title"><i class="fas fa-windows me-2"></i> Windows 11 Manager</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="runCompatibilityCheck()">
+                    <i class="fas fa-check-circle me-1"></i>Compatibility Check
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="exportReport('windows11')">
+                    <i class="fas fa-download me-1"></i>Export Report
+                </button>
+            </div>
+            <button type="button" class="btn btn-sm btn-primary" onclick="createBackup()">
+                <i class="fas fa-save me-1"></i>Create Backup
+            </button>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card enterprise-card border-left-primary">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Compatibility</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Ready</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card enterprise-card border-left-success">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">TPM 2.0</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Enabled</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-microchip fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card enterprise-card border-left-info">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Secure Boot</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Enabled</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-lock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card enterprise-card border-left-warning">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">UEFI</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Enabled</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-cog fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card enterprise-card">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-tools me-2"></i> Windows 11 Upgrade Tools</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-primary w-100" onclick="runCompatibilityCheck()">
+                                <i class="fas fa-check-circle me-2"></i>Compatibility Check
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-success w-100" onclick="createBackup()">
+                                <i class="fas fa-save me-2"></i>Smart Profile Backup
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-warning w-100" onclick="runSystemCheck()">
+                                <i class="fas fa-download me-2"></i>Download ISO
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-info w-100" onclick="generateReport('windows11')">
+                                <i class="fas fa-file-alt me-2"></i>Upgrade Report
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-danger w-100" onclick="runSystemCheck()">
+                                <i class="fas fa-rocket me-2"></i>Fresh Install Wizard
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-secondary w-100" onclick="runSystemCheck()">
+                                <i class="fas fa-usb me-2"></i>Create Bootable Media
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-dark w-100" onclick="runSystemCheck()">
+                                <i class="fas fa-microchip me-2"></i>TPM 2.0 Check
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <button class="btn btn-outline-light w-100" onclick="runSystemCheck()">
+                                <i class="fas fa-lock me-2"></i>Secure Boot Check
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
