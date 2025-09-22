@@ -2493,29 +2493,220 @@ Ready for system administration tasks.
         }
 
         function deploySoftware() {
-            updateStatus('Deploying software...');
-            addToSystemOutput('Starting automated software deployment...');
+            updateStatus('Opening software deployment interface...');
+            addToSystemOutput('Loading software deployment options...');
+            
+            const resultsDiv = document.getElementById('automationResults');
+            resultsDiv.innerHTML = `
+                <div class="alert alert-warning">
+                    <h6><i class="fas fa-download me-2"></i>Software Deployment Selection</h6>
+                    <p>Choose the software package to deploy:</p>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="list-group">
+                                <button class="list-group-item list-group-item-action" onclick="deploySelectedSoftware('office365')">
+                                    <i class="fas fa-file-word me-2"></i>Microsoft Office 365
+                                </button>
+                                <button class="list-group-item list-group-item-action" onclick="deploySelectedSoftware('adobe')">
+                                    <i class="fas fa-paint-brush me-2"></i>Adobe Creative Suite
+                                </button>
+                                <button class="list-group-item list-group-item-action" onclick="deploySelectedSoftware('chrome')">
+                                    <i class="fas fa-globe me-2"></i>Google Chrome
+                                </button>
+                                <button class="list-group-item list-group-item-action" onclick="deploySelectedSoftware('firefox')">
+                                    <i class="fas fa-fire me-2"></i>Mozilla Firefox
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="list-group">
+                                <button class="list-group-item list-group-item-action" onclick="deploySelectedSoftware('vscode')">
+                                    <i class="fas fa-code me-2"></i>Visual Studio Code
+                                </button>
+                                <button class="list-group-item list-group-item-action" onclick="deploySelectedSoftware('slack')">
+                                    <i class="fas fa-comments me-2"></i>Slack
+                                </button>
+                                <button class="list-group-item list-group-item-action" onclick="deploySelectedSoftware('zoom')">
+                                    <i class="fas fa-video me-2"></i>Zoom
+                                </button>
+                                <button class="list-group-item list-group-item-action" onclick="deploySelectedSoftware('custom')">
+                                    <i class="fas fa-upload me-2"></i>Custom Package
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-secondary" onclick="showDeploymentHistory()">
+                            <i class="fas fa-history me-2"></i>View Deployment History
+                        </button>
+                        <button class="btn btn-info" onclick="configureDeploymentSettings()">
+                            <i class="fas fa-cog me-2"></i>Deployment Settings
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function deploySelectedSoftware(softwareType) {
+            updateStatus('Deploying selected software...');
+            addToSystemOutput(`Starting deployment of ${softwareType}...`);
             
             const resultsDiv = document.getElementById('automationResults');
             resultsDiv.innerHTML = '<div class="alert alert-warning"><i class="fas fa-spinner fa-spin me-2"></i>Deploying software...</div>';
             
+            const softwarePackages = {
+                'office365': { name: 'Microsoft Office 365', size: '2.1 GB', time: '15 minutes' },
+                'adobe': { name: 'Adobe Creative Suite', size: '4.5 GB', time: '25 minutes' },
+                'chrome': { name: 'Google Chrome', size: '85 MB', time: '3 minutes' },
+                'firefox': { name: 'Mozilla Firefox', size: '75 MB', time: '2 minutes' },
+                'vscode': { name: 'Visual Studio Code', size: '120 MB', time: '4 minutes' },
+                'slack': { name: 'Slack', size: '95 MB', time: '3 minutes' },
+                'zoom': { name: 'Zoom', size: '110 MB', time: '3 minutes' },
+                'custom': { name: 'Custom Package', size: 'Variable', time: 'Variable' }
+            };
+            
+            const selectedSoftware = softwarePackages[softwareType];
+            
             setTimeout(() => {
                 updateStatus('Software deployment completed');
-                addToSystemOutput('Software deployment completed successfully');
+                addToSystemOutput(`Software deployment completed successfully - ${selectedSoftware.name}`);
                 
                 resultsDiv.innerHTML = `
                     <div class="alert alert-warning">
                         <h6><i class="fas fa-download me-2"></i>Software Deployment Results</h6>
-                        <p><strong>Package:</strong> Microsoft Office 365</p>
+                        <p><strong>Package:</strong> ${selectedSoftware.name}</p>
+                        <p><strong>Package Size:</strong> ${selectedSoftware.size}</p>
                         <p><strong>Target Systems:</strong> 25 workstations</p>
-                        <p><strong>Deployment Time:</strong> 15 minutes</p>
+                        <p><strong>Deployment Time:</strong> ${selectedSoftware.time}</p>
                         <p><strong>Success Rate:</strong> 100% (25/25)</p>
                         <p><strong>Failed Deployments:</strong> 0</p>
-                        <p><strong>Restart Required:</strong> Yes (scheduled for 6:00 PM)</p>
+                        <p><strong>Restart Required:</strong> ${softwareType === 'office365' || softwareType === 'adobe' ? 'Yes (scheduled for 6:00 PM)' : 'No'}</p>
                         <p><strong>Status:</strong> Software deployment completed successfully</p>
+                        <div class="mt-3">
+                            <button class="btn btn-success" onclick="deploySoftware()">
+                                <i class="fas fa-plus me-2"></i>Deploy Another Package
+                            </button>
+                            <button class="btn btn-info" onclick="showDeploymentHistory()">
+                                <i class="fas fa-history me-2"></i>View History
+                            </button>
+                        </div>
                     </div>
                 `;
             }, 6000);
+        }
+
+        function showDeploymentHistory() {
+            updateStatus('Loading deployment history...');
+            addToSystemOutput('Retrieving software deployment history...');
+            
+            const resultsDiv = document.getElementById('automationResults');
+            resultsDiv.innerHTML = '<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>Loading deployment history...</div>';
+            
+            setTimeout(() => {
+                updateStatus('Deployment history loaded');
+                addToSystemOutput('Software deployment history retrieved successfully');
+                
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-history me-2"></i>Software Deployment History</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Software</th>
+                                        <th>Targets</th>
+                                        <th>Status</th>
+                                        <th>Success Rate</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Today 5:50 PM</td>
+                                        <td>Microsoft Office 365</td>
+                                        <td>25 workstations</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>100%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Yesterday 2:30 PM</td>
+                                        <td>Google Chrome</td>
+                                        <td>15 workstations</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>100%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2 days ago 10:15 AM</td>
+                                        <td>Visual Studio Code</td>
+                                        <td>8 workstations</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>100%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3 days ago 3:45 PM</td>
+                                        <td>Slack</td>
+                                        <td>30 workstations</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                        <td>100%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-primary" onclick="deploySoftware()">
+                                <i class="fas fa-plus me-2"></i>New Deployment
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        function configureDeploymentSettings() {
+            updateStatus('Opening deployment settings...');
+            addToSystemOutput('Loading deployment configuration options...');
+            
+            const resultsDiv = document.getElementById('automationResults');
+            resultsDiv.innerHTML = '<div class="alert alert-secondary"><i class="fas fa-spinner fa-spin me-2"></i>Loading settings...</div>';
+            
+            setTimeout(() => {
+                updateStatus('Deployment settings loaded');
+                addToSystemOutput('Deployment settings configuration opened');
+                
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-secondary">
+                        <h6><i class="fas fa-cog me-2"></i>Deployment Settings Configuration</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Default Settings</h6>
+                                <ul class="list-unstyled">
+                                    <li><strong>Default Target:</strong> All workstations</li>
+                                    <li><strong>Deployment Time:</strong> Business hours (9 AM - 5 PM)</li>
+                                    <li><strong>Restart Policy:</strong> Schedule for after hours</li>
+                                    <li><strong>Notification:</strong> Email alerts enabled</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Advanced Options</h6>
+                                <ul class="list-unstyled">
+                                    <li><strong>Rollback:</strong> Automatic on failure</li>
+                                    <li><strong>Verification:</strong> Post-deployment checks</li>
+                                    <li><strong>Logging:</strong> Detailed deployment logs</li>
+                                    <li><strong>Bandwidth:</strong> Throttled during business hours</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-primary" onclick="deploySoftware()">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Deployment
+                            </button>
+                            <button class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>Save Settings
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }, 2000);
         }
 
         function manageWorkflows() {
@@ -3728,6 +3919,9 @@ Ready for system administration tasks.
         window.scheduleAutomation = scheduleAutomation;
         window.runBatchScript = runBatchScript;
         window.deploySoftware = deploySoftware;
+        window.deploySelectedSoftware = deploySelectedSoftware;
+        window.showDeploymentHistory = showDeploymentHistory;
+        window.configureDeploymentSettings = configureDeploymentSettings;
         window.manageWorkflows = manageWorkflows;
         window.monitorAutomation = monitorAutomation;
         window.backupAutomation = backupAutomation;

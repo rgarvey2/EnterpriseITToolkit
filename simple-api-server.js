@@ -268,6 +268,20 @@ app.get('/api/netif', (req, res) => {
     });
 });
 
+// Handle requests to port 8080 (legacy endpoint)
+app.get('/', (req, res) => {
+    if (req.get('host').includes('8080')) {
+        console.log('Legacy port 8080 request redirected');
+        res.redirect('http://localhost:8082/');
+    } else {
+        res.json({
+            message: 'Enterprise IT Toolkit API Server',
+            version: '1.0.0',
+            status: 'running'
+        });
+    }
+});
+
 // Handle any missing endpoints to prevent 403 errors
 app.get('/api/*', (req, res) => {
     console.log('Missing endpoint requested:', req.path);
