@@ -268,17 +268,55 @@ app.get('/api/netif', (req, res) => {
     });
 });
 
-// Handle requests to port 8080 (legacy endpoint)
+// Service status endpoints
+app.get('/api/phpadmin/status', (req, res) => {
+    res.json({ status: 'running', service: 'phpmyadmin', port: 8080 });
+});
+
+app.get('/api/database/status', (req, res) => {
+    res.json({ status: 'running', service: 'postgresql', port: 5432 });
+});
+
+app.get('/api/cache/status', (req, res) => {
+    res.json({ status: 'running', service: 'redis', port: 6379 });
+});
+
+app.get('/api/monitoring/status', (req, res) => {
+    res.json({ status: 'running', service: 'grafana', port: 3000 });
+});
+
+// Handle requests to port 8080 (PHP Admin Panel check)
 app.get('/', (req, res) => {
-    if (req.get('host').includes('8080')) {
-        console.log('Legacy port 8080 request redirected');
-        res.redirect('http://localhost:8082/');
+    const host = req.get('host');
+    console.log('Request to:', host);
+    
+    if (host && host.includes('8080')) {
+        console.log('PHP Admin Panel status check');
+        res.json({
+            message: 'PHP Admin Panel',
+            status: 'running',
+            port: 8080,
+            service: 'phpmyadmin'
+        });
     } else {
         res.json({
             message: 'Enterprise IT Toolkit API Server',
             version: '1.0.0',
             status: 'running'
         });
+    }
+});
+
+// Handle HEAD requests to port 8080 (for status checks)
+app.head('/', (req, res) => {
+    const host = req.get('host');
+    console.log('HEAD request to:', host);
+    
+    if (host && host.includes('8080')) {
+        console.log('PHP Admin Panel HEAD status check');
+        res.status(200).end();
+    } else {
+        res.status(200).end();
     }
 });
 

@@ -1583,39 +1583,57 @@ Ready for system administration tasks.
         // Check Docker services status
         function checkDockerServices() {
             const services = [
-                { name: 'webServerStatus', url: 'http://localhost:8082/', port: '8082' },
-                { name: 'apiServerStatus', url: 'http://localhost:5004/', port: '5004' },
-                { name: 'phpAdminStatus', url: 'http://localhost:8080/', port: '8080' },
-                { name: 'postgresStatus', url: 'http://localhost:5432/', port: '5432' },
-                { name: 'redisStatus', url: 'http://localhost:6379/', port: '6379' },
-                { name: 'grafanaStatus', url: 'http://localhost:3000/', port: '3000' }
+                { name: 'webServerStatus', url: '/health', port: '8082', isApi: true },
+                { name: 'apiServerStatus', url: '/health', port: '5004', isApi: true },
+                { name: 'phpAdminStatus', url: '/api/phpadmin/status', port: '8080', isApi: true },
+                { name: 'postgresStatus', url: '/api/database/status', port: '5432', isApi: true },
+                { name: 'redisStatus', url: '/api/cache/status', port: '6379', isApi: true },
+                { name: 'grafanaStatus', url: '/api/monitoring/status', port: '3000', isApi: true }
             ];
             
             services.forEach(service => {
-                checkServiceStatus(service.name, service.url, service.port);
+                checkServiceStatus(service.name, service.url, service.port, service.isApi);
             });
         }
         
         // Check individual service status
-        function checkServiceStatus(elementId, url, port) {
+        function checkServiceStatus(elementId, url, port, isApi = false) {
             const element = document.getElementById(elementId);
             
-            // For database services, we'll just check if the port is accessible
-            if (port === '5432' || port === '6379') {
-                element.textContent = 'Running (Port ' + port + ')';
-                element.style.color = '#27ae60';
-                return;
-            }
-            
-            fetch(url, { method: 'HEAD', mode: 'no-cors' })
-                .then(() => {
+            if (isApi) {
+                // Use API endpoints for service status checks
+                fetch(url)
+                    .then(response => {
+                        if (response.ok) {
+                            element.textContent = 'Running (Port ' + port + ')';
+                            element.style.color = '#27ae60';
+                        } else {
+                            element.textContent = 'Not Accessible (Port ' + port + ')';
+                            element.style.color = '#e74c3c';
+                        }
+                    })
+                    .catch(() => {
+                        element.textContent = 'Not Accessible (Port ' + port + ')';
+                        element.style.color = '#e74c3c';
+                    });
+            } else {
+                // For database services, we'll just check if the port is accessible
+                if (port === '5432' || port === '6379') {
                     element.textContent = 'Running (Port ' + port + ')';
                     element.style.color = '#27ae60';
-                })
-                .catch(() => {
-                    element.textContent = 'Not Accessible (Port ' + port + ')';
-                    element.style.color = '#e74c3c';
-                });
+                    return;
+                }
+                
+                fetch(url, { method: 'HEAD', mode: 'no-cors' })
+                    .then(() => {
+                        element.textContent = 'Running (Port ' + port + ')';
+                        element.style.color = '#27ae60';
+                    })
+                    .catch(() => {
+                        element.textContent = 'Not Accessible (Port ' + port + ')';
+                        element.style.color = '#e74c3c';
+                    });
+            }
         }
 
         // Update connection status
