@@ -7,7 +7,7 @@ services:
     name: enterprise-toolkit-web
     env: static
     buildCommand: npm install && npm run build
-    staticPublishPath: ./dist
+    staticPublishPath: ./Web/wwwroot/dist
     routes:
       - type: rewrite
         source: /*
