@@ -26,6 +26,7 @@
   "license": "MIT",
   "devDependencies": {
     "autoprefixer": "^10.4.16",
+    "copy-webpack-plugin": "^13.0.1",
     "css-minimizer-webpack-plugin": "^5.0.1",
     "cssnano": "^6.0.1",
     "eslint": "^8.55.0",

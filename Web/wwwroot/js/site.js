@@ -535,38 +535,11 @@ class EnterpriseDashboard {
     }
 
     async authenticate() {
-        try {
-            // Use secure authentication with proper validation
-            const response = await fetch(`${this.apiBaseUrl}/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: JSON.stringify({
-                    username: this.getStoredUsername(),
-                    password: this.getStoredPassword(),
-                    timestamp: Date.now(),
-                    nonce: this.generateNonce()
-                })
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                this.authToken = result.token;
-                this.desktopAppRunning = true;
-                console.log('Authentication successful - Desktop app connected');
-                this.showNotification('Desktop app connected successfully!', 'success');
-            } else {
-                console.warn('Authentication failed, using demo mode');
-                this.desktopAppRunning = false;
-                this.useDemoMode();
-            }
-        } catch (error) {
-            console.warn('API not available, using demo mode:', error);
-            this.desktopAppRunning = false;
-            this.useDemoMode();
-        }
+        // Skip API authentication and go directly to demo mode
+        // This prevents CORS errors and ensures the app works independently
+        console.log('Skipping API authentication, using demo mode');
+        this.desktopAppRunning = false;
+        this.useDemoMode();
     }
 
     getStoredUsername() {
