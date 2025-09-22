@@ -12,12 +12,12 @@ module.exports = (env, argv) => {
             secureAuth: './Web/wwwroot/js/secure-auth.js',
             styles: './Web/wwwroot/css/site.css'
         },
-        output: {
-            path: path.resolve(__dirname, 'Web/wwwroot/dist'),
-            filename: isProduction ? '[name].[contenthash].js' : '[name].js',
-            clean: true,
-            publicPath: './'
-        },
+               output: {
+                   path: path.resolve(__dirname, 'Web/wwwroot/dist'),
+                   filename: '[name].js',
+                   clean: true,
+                   publicPath: './'
+               },
         module: {
             rules: [
                 {
