@@ -17,7 +17,7 @@ class EnterpriseDashboard {
     detectApiUrl() {
         // Check if we're running on localhost (development)
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            return 'http://localhost:5001/api';
+            return 'http://localhost:5003/api';
         }
         
         // Check if we're running on Render (production)
@@ -27,7 +27,7 @@ class EnterpriseDashboard {
         }
         
         // Default to localhost for other environments
-        return 'http://localhost:5001/api';
+        return 'http://localhost:5003/api';
     }
 
     init() {

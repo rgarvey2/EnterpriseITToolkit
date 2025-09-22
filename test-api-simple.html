@@ -11,7 +11,7 @@
     <script>
         async function testAPI() {
             try {
-                const response = await fetch('http://localhost:5001/');
+                const response = await fetch('http://localhost:5003/');
                 const data = await response.json();
                 document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
             } catch (error) {

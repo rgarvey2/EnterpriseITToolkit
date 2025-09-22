@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const port = 5001;
+const port = 5003;
 
 // Enable CORS for all origins
 app.use(cors({
@@ -11,13 +11,15 @@ app.use(cors({
 
 app.use(express.json());
 
-// Root endpoint
+// Root endpoint - MUST be first
 app.get('/', (req, res) => {
+    console.log('Root endpoint hit');
     res.json({
         message: 'Enterprise IT Toolkit API Server',
         version: '1.0.0',
         status: 'running',
         endpoints: [
+            'GET /',
             'POST /api/auth/login',
             'GET /health',
             'GET /api/system/health',
@@ -98,6 +100,7 @@ app.get('/api/network/adapters', (req, res) => {
 app.listen(port, () => {
     console.log(`🚀 Simple API server running at http://localhost:${port}`);
     console.log(`📋 Available endpoints:`);
+    console.log(`  • GET /`);
     console.log(`  • POST /api/auth/login`);
     console.log(`  • GET /health`);
     console.log(`  • GET /api/system/health`);
