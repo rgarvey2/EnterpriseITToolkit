@@ -11,6 +11,26 @@ app.use(cors({
 
 app.use(express.json());
 
+// Root endpoint
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Enterprise IT Toolkit API Server',
+        version: '1.0.0',
+        status: 'running',
+        endpoints: [
+            'POST /api/auth/login',
+            'GET /health',
+            'GET /api/system/health',
+            'GET /api/system/performance',
+            'GET /api/network/adapters'
+        ],
+        testCredentials: {
+            username: 'admin',
+            password: 'admin123'
+        }
+    });
+});
+
 // Simple authentication endpoint
 app.post('/api/auth/login', (req, res) => {
     const { username, password } = req.body;
