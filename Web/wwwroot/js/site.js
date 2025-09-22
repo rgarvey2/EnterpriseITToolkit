@@ -558,15 +558,14 @@ class EnterpriseDashboard {
                 console.log('Authentication successful - Desktop app connected');
                 this.showNotification('Desktop app connected successfully!', 'success');
             } else {
-                console.warn('Authentication failed, using mock data');
+                console.warn('Authentication failed, using demo mode');
                 this.desktopAppRunning = false;
-                this.showLoginModal();
+                this.useDemoMode();
             }
         } catch (error) {
-            console.warn('Desktop app not available, using mock data:', error);
+            console.warn('API not available, using demo mode:', error);
             this.desktopAppRunning = false;
-            this.showNotification('Desktop app not running - using demo data', 'warning');
-            this.showLoginModal();
+            this.useDemoMode();
         }
     }
 
@@ -639,7 +638,25 @@ class EnterpriseDashboard {
     useDemoMode() {
         this.desktopAppRunning = false;
         this.showNotification('Using demo mode with sample data', 'info');
-        bootstrap.Modal.getInstance(document.querySelector('.modal')).hide();
+        
+        // Hide any existing modal
+        const existingModal = document.querySelector('.modal');
+        if (existingModal) {
+            const modalInstance = bootstrap.Modal.getInstance(existingModal);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+        }
+        
+        // Load demo data
+        this.loadDemoData();
+    }
+
+    loadDemoData() {
+        // Load demo data for all sections
+        this.loadDashboardData();
+        this.updateChartsWithMockData();
+        this.showNotification('Demo data loaded successfully!', 'success');
     }
 
     validateInput(username, password) {
@@ -656,17 +673,24 @@ class EnterpriseDashboard {
 
     async loadDashboardData() {
         try {
-            const [systemHealth, performanceMetrics, networkAdapters] = await Promise.all([
-                this.getSystemHealth(),
-                this.getPerformanceMetrics(),
-                this.getNetworkAdapters()
-            ]);
+            if (this.desktopAppRunning) {
+                const [systemHealth, performanceMetrics, networkAdapters] = await Promise.all([
+                    this.getSystemHealth(),
+                    this.getPerformanceMetrics(),
+                    this.getNetworkAdapters()
+                ]);
 
-            this.updateDashboardMetrics(systemHealth, performanceMetrics);
-            this.updateCharts(performanceMetrics);
+                this.updateDashboardMetrics(systemHealth, performanceMetrics);
+                this.updateCharts(performanceMetrics);
+            } else {
+                // Use demo data
+                this.updateDashboardMetrics(null, null);
+                this.updateChartsWithMockData();
+            }
         } catch (error) {
             console.error('Error loading dashboard data:', error);
             // Fallback to mock data
+            this.updateDashboardMetrics(null, null);
             this.updateChartsWithMockData();
         }
     }
@@ -725,19 +749,15 @@ class EnterpriseDashboard {
 
     updateDashboardMetrics(systemHealth, performanceMetrics) {
         // Update system health metric
-        if (systemHealth) {
-            const healthElement = document.querySelector('.border-left-primary .h5');
-            if (healthElement) {
-                healthElement.textContent = `${systemHealth.overallHealth || 98.5}%`;
-            }
+        const healthElement = document.querySelector('.border-left-primary .h5');
+        if (healthElement) {
+            healthElement.textContent = `${systemHealth?.overallHealth || 98.5}%`;
         }
 
         // Update performance metric
-        if (performanceMetrics) {
-            const performanceElement = document.querySelector('.border-left-success .h5');
-            if (performanceElement) {
-                performanceElement.textContent = `${performanceMetrics.overallScore || 94.2}%`;
-            }
+        const performanceElement = document.querySelector('.border-left-success .h5');
+        if (performanceElement) {
+            performanceElement.textContent = `${performanceMetrics?.overallScore || 94.2}%`;
         }
 
         // Update connection status
