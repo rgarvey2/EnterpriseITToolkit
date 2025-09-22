@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enterprise IT Toolkit v4.0 - Web Edition</title>
+    
+    <!-- External Resources -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous"></script>
+    
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --dark-bg: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-light: #ecf0f1;
+            --border-color: #444;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .desktop-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 10px 20px;
+            border-bottom: 2px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .desktop-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .desktop-nav {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        .nav-tabs {
+            border: none;
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        .nav-tabs .nav-link {
+            background-color: transparent;
+            border: none;
+            color: var(--text-light);
+            padding: 12px 20px;
+            border-radius: 0;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-bottom: 3px solid var(--success-color);
+        }
+
+        .main-container {
+            display: flex;
+            height: calc(100vh - 120px);
+        }
+
+        .left-panel {
+            width: 350px;
+            background-color: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            flex: 1;
+            background-color: var(--dark-bg);
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .system-overview {
+            background-color: var(--primary-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .system-overview h4 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .metric-label {
+            color: var(--text-light);
+        }
+
+        .metric-value {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .recent-activity {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .recent-activity h4 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: var(--dark-bg);
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .activity-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 10px;
+        }
+
+        .activity-icon.success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .activity-icon.warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .activity-icon.info {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .action-btn.system-health { background-color: var(--success-color); }
+        .action-btn.software-inventory { background-color: #9b59b6; }
+        .action-btn.network-test { background-color: var(--accent-color); }
+        .action-btn.optimize-system { background-color: #2980b9; }
+        .action-btn.security-check { background-color: var(--danger-color); }
+        .action-btn.backup-registry { background-color: #8b4513; }
+
+        .system-output {
+            background-color: var(--card-bg);
+            padding: 15px;
+            border-radius: 8px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 8px 20px;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .remote-execution {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .remote-execution h4 {
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+
+        .target-input {
+            background-color: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 10px;
+            border-radius: 4px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .target-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .execute-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .execute-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .results-area {
+            background-color: var(--dark-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                width: 100%;
+                height: auto;
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Desktop Header -->
+    <div class="desktop-header">
+        <h1 class="desktop-title">Enhanced Enterprise IT Toolkit v4.0 - Web Edition</h1>
+        <div class="user-info">
+            <i class="fas fa-user-circle me-2"></i>
+            <span>Users: Ryan Gurary | Computers: CUSTOMPC001</span>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="desktop-nav">
+        <ul class="nav nav-tabs" id="mainTabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#" onclick="showTab('dashboard')">
+                    <i class="fas fa-tachometer-alt me-1"></i>Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('system-health')">
+                    <i class="fas fa-heartbeat me-1"></i>System Health
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('network-tools')">
+                    <i class="fas fa-network-wired me-1"></i>Network Tools
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('active-directory')">
+                    <i class="fas fa-users me-1"></i>Active Directory
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('windows11')">
+                    <i class="fas fa-windows me-1"></i>Windows 11 Manager
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('security')">
+                    <i class="fas fa-shield-alt me-1"></i>Security
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('automation')">
+                    <i class="fas fa-robot me-1"></i>Enterprise Automation
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('troubleshooting')">
+                    <i class="fas fa-tools me-1"></i>Troubleshooting
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('workstation')">
+                    <i class="fas fa-desktop me-1"></i>Workstation Management
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('performance')">
+                    <i class="fas fa-chart-line me-1"></i>Performance Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('reports')">
+                    <i class="fas fa-file-alt me-1"></i>Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('sql-server')">
+                    <i class="fas fa-database me-1"></i>SQL Server Tools
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('exchange')">
+                    <i class="fas fa-envelope me-1"></i>Exchange Tools
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('vmware')">
+                    <i class="fas fa-server me-1"></i>VMware Tools
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('iis')">
+                    <i class="fas fa-globe me-1"></i>IIS Management
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('group-policy')">
+                    <i class="fas fa-cogs me-1"></i>Group Policy
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" onclick="showTab('event-logs')">
+                    <i class="fas fa-list-alt me-1"></i>Event Logs
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Panel -->
+        <div class="left-panel">
+            <!-- System Overview -->
+            <div class="system-overview">
+                <h4><i class="fas fa-info-circle me-2"></i>System Overview</h4>
+                <div class="metric-row">
+                    <span class="metric-label">Date/Time:</span>
+                    <span class="metric-value" id="currentDateTime"></span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">CPU Usage:</span>
+                    <span class="metric-value" id="cpuUsage">25%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Memory:</span>
+                    <span class="metric-value" id="memoryUsage">8.2 GB / 16 GB</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Disk Space:</span>
+                    <span class="metric-value" id="diskUsage">250 GB / 500 GB</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Network:</span>
+                    <span class="metric-value" id="networkStatus">Connected</span>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="recent-activity">
+                <h4><i class="fas fa-history me-2"></i>Recent Activity</h4>
+                <div class="activity-item">
+                    <div class="activity-icon success">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div>
+                        <div>System health check completed</div>
+                        <small>All systems operational</small>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon success">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div>
+                        <div>Security scan completed</div>
+                        <small>No threats detected</small>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon info">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <div>
+                        <div>Network connectivity test passed</div>
+                        <small>All connections stable</small>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon warning">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div>
+                        <div>Software inventory updated</div>
+                        <small>45 applications detected</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-btn system-health" onclick="executeRemote('system-health')">
+                    <i class="fas fa-heartbeat me-2"></i>System Health
+                </button>
+                <button class="action-btn software-inventory" onclick="executeRemote('software-inventory')">
+                    <i class="fas fa-box me-2"></i>Software Inventory
+                </button>
+                <button class="action-btn network-test" onclick="executeRemote('network-test')">
+                    <i class="fas fa-network-wired me-2"></i>Network Test
+                </button>
+                <button class="action-btn optimize-system" onclick="executeRemote('optimize-system')">
+                    <i class="fas fa-magic me-2"></i>Optimize System
+                </button>
+                <button class="action-btn security-check" onclick="executeRemote('security-check')">
+                    <i class="fas fa-shield-alt me-2"></i>Security Check
+                </button>
+                <button class="action-btn backup-registry" onclick="executeRemote('backup-registry')">
+                    <i class="fas fa-save me-2"></i>Backup Registry
+                </button>
+            </div>
+
+            <!-- System Output -->
+            <div class="system-output" id="systemOutput">
+Enterprise IT Toolkit v4.0 initialized successfully.
+Ready for system administration tasks.
+            </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="right-panel">
+            <!-- Dashboard Tab Content -->
+            <div id="dashboard-content" class="tab-content active">
+                <h2><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h2>
+                <p>Welcome to the Enterprise IT Toolkit Web Edition. Select a function from the left panel or use the navigation tabs above.</p>
+                
+                <!-- Remote Execution Panel -->
+                <div class="remote-execution">
+                    <h4><i class="fas fa-terminal me-2"></i>Remote Execution</h4>
+                    <input type="text" class="target-input" id="targetMachine" placeholder="Enter target machine (IP address or hostname)">
+                    <button class="execute-btn" onclick="executeOnTarget()">
+                        <i class="fas fa-play me-2"></i>Execute on Target
+                    </button>
+                    <div class="results-area" id="executionResults">Results will appear here...</div>
+                </div>
+            </div>
+
+            <!-- Other Tab Contents (initially hidden) -->
+            <div id="system-health-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-heartbeat me-2"></i>System Health</h2>
+                <p>System health monitoring and diagnostics tools.</p>
+            </div>
+
+            <div id="network-tools-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-network-wired me-2"></i>Network Tools</h2>
+                <p>Network diagnostics and management tools.</p>
+            </div>
+
+            <div id="active-directory-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-users me-2"></i>Active Directory</h2>
+                <p>Active Directory management and user administration.</p>
+            </div>
+
+            <div id="windows11-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-windows me-2"></i>Windows 11 Manager</h2>
+                <p>Windows 11 upgrade and management tools.</p>
+            </div>
+
+            <div id="security-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-shield-alt me-2"></i>Security</h2>
+                <p>Security scanning and management tools.</p>
+            </div>
+
+            <div id="automation-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-robot me-2"></i>Enterprise Automation</h2>
+                <p>Automated tasks and workflow management.</p>
+            </div>
+
+            <div id="troubleshooting-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-tools me-2"></i>Troubleshooting</h2>
+                <p>System troubleshooting and diagnostic tools.</p>
+            </div>
+
+            <div id="workstation-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-desktop me-2"></i>Workstation Management</h2>
+                <p>Workstation configuration and management.</p>
+            </div>
+
+            <div id="performance-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-chart-line me-2"></i>Performance Dashboard</h2>
+                <p>System performance monitoring and analytics.</p>
+            </div>
+
+            <div id="reports-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-file-alt me-2"></i>Reports</h2>
+                <p>Generate and view system reports.</p>
+            </div>
+
+            <div id="sql-server-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-database me-2"></i>SQL Server Tools</h2>
+                <p>SQL Server management and administration.</p>
+            </div>
+
+            <div id="exchange-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-envelope me-2"></i>Exchange Tools</h2>
+                <p>Exchange Server management tools.</p>
+            </div>
+
+            <div id="vmware-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-server me-2"></i>VMware Tools</h2>
+                <p>VMware infrastructure management.</p>
+            </div>
+
+            <div id="iis-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-globe me-2"></i>IIS Management</h2>
+                <p>Internet Information Services management.</p>
+            </div>
+
+            <div id="group-policy-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-cogs me-2"></i>Group Policy</h2>
+                <p>Group Policy management and configuration.</p>
+            </div>
+
+            <div id="event-logs-content" class="tab-content" style="display: none;">
+                <h2><i class="fas fa-list-alt me-2"></i>Event Logs</h2>
+                <p>Windows Event Log viewing and analysis.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <span id="statusText">Ready</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global variables
+        let currentTab = 'dashboard';
+        let apiBaseUrl = 'http://localhost:5003/api';
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            updateSystemMetrics();
+            setInterval(updateSystemMetrics, 5000);
+            
+            // Detect environment
+            if (window.location.hostname.includes('onrender.com')) {
+                apiBaseUrl = null; // Use demo mode on Render
+            }
+        });
+
+        // Update date and time
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            document.getElementById('currentDateTime').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Update system metrics
+        function updateSystemMetrics() {
+            if (apiBaseUrl) {
+                // Try to get real data from API
+                fetch(`${apiBaseUrl}/system/health`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('cpuUsage').textContent = `${data.cpuUsage || 25}%`;
+                        document.getElementById('memoryUsage').textContent = `${data.memoryUsage || '8.2'} GB / 16 GB`;
+                        document.getElementById('diskUsage').textContent = `${data.diskUsage || '250'} GB / 500 GB`;
+                    })
+                    .catch(error => {
+                        console.log('Using demo data for system metrics');
+                        // Use demo data if API is not available
+                        document.getElementById('cpuUsage').textContent = '25%';
+                        document.getElementById('memoryUsage').textContent = '8.2 GB / 16 GB';
+                        document.getElementById('diskUsage').textContent = '250 GB / 500 GB';
+                    });
+            } else {
+                // Use demo data
+                document.getElementById('cpuUsage').textContent = '25%';
+                document.getElementById('memoryUsage').textContent = '8.2 GB / 16 GB';
+                document.getElementById('diskUsage').textContent = '250 GB / 500 GB';
+            }
+        }
+
+        // Show tab content
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Remove active class from all nav links
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(`${tabName}-content`).style.display = 'block';
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+            
+            currentTab = tabName;
+            updateStatus(`Switched to ${tabName.replace('-', ' ')}`);
+        }
+
+        // Execute remote function
+        function executeRemote(functionName) {
+            const targetMachine = document.getElementById('targetMachine').value;
+            if (!targetMachine) {
+                alert('Please enter a target machine first');
+                return;
+            }
+
+            updateStatus(`Executing ${functionName} on ${targetMachine}...`);
+            addToSystemOutput(`Executing ${functionName} on ${targetMachine}...`);
+
+            if (apiBaseUrl) {
+                // Try to execute via API
+                fetch(`${apiBaseUrl}/remote/execute`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        target: targetMachine,
+                        function: functionName
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    updateStatus('Execution completed');
+                    addToSystemOutput(`Result: ${JSON.stringify(data, null, 2)}`);
+                    document.getElementById('executionResults').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    updateStatus('Execution failed - using demo mode');
+                    addToSystemOutput(`Demo execution of ${functionName} on ${targetMachine}`);
+                    document.getElementById('executionResults').textContent = `Demo execution of ${functionName} on ${targetMachine}\n\nThis would normally execute the ${functionName} function on the target machine.`;
+                });
+            } else {
+                // Demo mode
+                updateStatus('Demo execution completed');
+                addToSystemOutput(`Demo execution of ${functionName} on ${targetMachine}`);
+                document.getElementById('executionResults').textContent = `Demo execution of ${functionName} on ${targetMachine}\n\nThis would normally execute the ${functionName} function on the target machine.`;
+            }
+        }
+
+        // Execute on target machine
+        function executeOnTarget() {
+            const targetMachine = document.getElementById('targetMachine').value;
+            if (!targetMachine) {
+                alert('Please enter a target machine');
+                return;
+            }
+
+            updateStatus(`Connecting to ${targetMachine}...`);
+            addToSystemOutput(`Connecting to ${targetMachine}...`);
+
+            if (apiBaseUrl) {
+                // Try to connect via API
+                fetch(`${apiBaseUrl}/remote/connect`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        target: targetMachine
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    updateStatus(`Connected to ${targetMachine}`);
+                    addToSystemOutput(`Connected to ${targetMachine}: ${JSON.stringify(data, null, 2)}`);
+                    document.getElementById('executionResults').textContent = `Connected to ${targetMachine}\n\n${JSON.stringify(data, null, 2)}`;
+                })
+                .catch(error => {
+                    updateStatus(`Demo connection to ${targetMachine}`);
+                    addToSystemOutput(`Demo connection to ${targetMachine}`);
+                    document.getElementById('executionResults').textContent = `Demo connection to ${targetMachine}\n\nThis would normally establish a connection to the target machine for remote execution.`;
+                });
+            } else {
+                // Demo mode
+                updateStatus(`Demo connection to ${targetMachine}`);
+                addToSystemOutput(`Demo connection to ${targetMachine}`);
+                document.getElementById('executionResults').textContent = `Demo connection to ${targetMachine}\n\nThis would normally establish a connection to the target machine for remote execution.`;
+            }
+        }
+
+        // Update status bar
+        function updateStatus(message) {
+            document.getElementById('statusText').textContent = message;
+        }
+
+        // Add to system output
+        function addToSystemOutput(message) {
+            const output = document.getElementById('systemOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            output.textContent += `\n[${timestamp}] ${message}`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Global functions for compatibility
+        window.showTab = showTab;
+        window.executeRemote = executeRemote;
+        window.executeOnTarget = executeOnTarget;
+    </script>
+</body>
+</html>

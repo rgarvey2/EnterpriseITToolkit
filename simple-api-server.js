@@ -97,6 +97,148 @@ app.get('/api/network/adapters', (req, res) => {
     ]);
 });
 
+// Remote execution endpoint
+app.post('/api/remote/execute', (req, res) => {
+    const { target, function: functionName } = req.body;
+    
+    console.log(`Remote execution request: ${functionName} on ${target}`);
+    
+    // Simulate remote execution
+    const results = {
+        success: true,
+        target: target,
+        function: functionName,
+        timestamp: new Date().toISOString(),
+        results: simulateRemoteExecution(functionName, target)
+    };
+    
+    res.json(results);
+});
+
+// Remote connection endpoint
+app.post('/api/remote/connect', (req, res) => {
+    const { target } = req.body;
+    
+    console.log(`Remote connection request to: ${target}`);
+    
+    // Simulate connection
+    const connection = {
+        success: true,
+        target: target,
+        connected: true,
+        timestamp: new Date().toISOString(),
+        systemInfo: {
+            hostname: target,
+            os: 'Windows 11 Pro',
+            architecture: 'x64',
+            uptime: '2 days, 14 hours',
+            users: ['Administrator', 'Ryan Gurary']
+        }
+    };
+    
+    res.json(connection);
+});
+
+// System health endpoint with more details
+app.get('/api/system/health', (req, res) => {
+    res.json({
+        overallHealth: 98.5,
+        cpuUsage: Math.floor(Math.random() * 30) + 20, // 20-50%
+        memoryUsage: (Math.random() * 2 + 7).toFixed(1), // 7-9 GB
+        diskUsage: Math.floor(Math.random() * 100) + 200, // 200-300 GB
+        networkStatus: 'Connected',
+        checks: [
+            { name: 'CPU', status: 'Healthy', value: '25%' },
+            { name: 'Memory', status: 'Healthy', value: '8.2 GB / 16 GB' },
+            { name: 'Disk', status: 'Healthy', value: '250 GB / 500 GB' },
+            { name: 'Network', status: 'Healthy', value: 'Connected' }
+        ]
+    });
+});
+
+// Software inventory endpoint
+app.get('/api/software/inventory', (req, res) => {
+    res.json({
+        totalApplications: 45,
+        applications: [
+            { name: 'Microsoft Office 365', version: '16.0.14326.20404', publisher: 'Microsoft Corporation' },
+            { name: 'Google Chrome', version: '117.0.5938.132', publisher: 'Google LLC' },
+            { name: 'Visual Studio Code', version: '1.82.2', publisher: 'Microsoft Corporation' },
+            { name: 'Adobe Acrobat Reader', version: '23.006.20320', publisher: 'Adobe Inc.' },
+            { name: 'Windows Security', version: '4.18.23080.1004', publisher: 'Microsoft Corporation' }
+        ]
+    });
+});
+
+// Network test endpoint
+app.get('/api/network/test', (req, res) => {
+    res.json({
+        ping: {
+            google: { host: '8.8.8.8', time: '12ms', status: 'Success' },
+            cloudflare: { host: '1.1.1.1', time: '8ms', status: 'Success' }
+        },
+        dns: {
+            primary: '8.8.8.8',
+            secondary: '8.8.4.4',
+            status: 'Resolving'
+        },
+        connectivity: 'All tests passed'
+    });
+});
+
+// Security check endpoint
+app.get('/api/security/check', (req, res) => {
+    res.json({
+        antivirus: { status: 'Active', definition: 'Up to date', lastScan: '2 hours ago' },
+        firewall: { status: 'Enabled', rules: 15, blocked: 0 },
+        windowsUpdate: { status: 'Up to date', lastCheck: '1 day ago' },
+        vulnerabilities: { critical: 0, high: 0, medium: 2, low: 5 },
+        overall: 'Secure'
+    });
+});
+
+// Function to simulate remote execution
+function simulateRemoteExecution(functionName, target) {
+    const simulations = {
+        'system-health': {
+            cpu: '25%',
+            memory: '8.2 GB / 16 GB',
+            disk: '250 GB / 500 GB',
+            network: 'Connected',
+            status: 'All systems operational'
+        },
+        'software-inventory': {
+            totalApplications: 45,
+            lastUpdated: new Date().toISOString(),
+            status: 'Inventory complete'
+        },
+        'network-test': {
+            ping: '12ms',
+            dns: 'Resolving',
+            connectivity: 'All tests passed'
+        },
+        'optimize-system': {
+            tempFilesCleared: '2.3 GB',
+            startupPrograms: 'Optimized',
+            services: 'Optimized',
+            status: 'System optimized'
+        },
+        'security-check': {
+            antivirus: 'Active',
+            firewall: 'Enabled',
+            vulnerabilities: '2 medium, 5 low',
+            status: 'Secure'
+        },
+        'backup-registry': {
+            backupLocation: 'C:\\Backups\\Registry',
+            size: '45 MB',
+            status: 'Backup completed successfully'
+        }
+    };
+    
+    return simulations[functionName] || { status: 'Function executed successfully' };
+}
+
 app.listen(port, () => {
     console.log(`🚀 Simple API server running at http://localhost:${port}`);
     console.log(`📋 Available endpoints:`);
@@ -106,5 +248,10 @@ app.listen(port, () => {
     console.log(`  • GET /api/system/health`);
     console.log(`  • GET /api/system/performance`);
     console.log(`  • GET /api/network/adapters`);
+    console.log(`  • POST /api/remote/execute`);
+    console.log(`  • POST /api/remote/connect`);
+    console.log(`  • GET /api/software/inventory`);
+    console.log(`  • GET /api/network/test`);
+    console.log(`  • GET /api/security/check`);
     console.log(`\n🔐 Test credentials: admin / admin123`);
 });
