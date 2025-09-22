@@ -151,14 +151,14 @@
                         </h1>
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group me-2">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="enterpriseDashboard.exportReport('dashboard')">
                                     <i class="fas fa-download me-1"></i>Export
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="enterpriseDashboard.runSystemCheck()">
                                     <i class="fas fa-refresh me-1"></i>Refresh
                                 </button>
                             </div>
-                            <button type="button" class="btn btn-sm btn-primary">
+                            <button type="button" class="btn btn-sm btn-primary" onclick="enterpriseDashboard.createAutomationJob()">
                                 <i class="fas fa-plus me-1"></i>New Task
                             </button>
                         </div>
@@ -356,14 +356,14 @@
                         </h1>
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group me-2">
-                                <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="enterpriseDashboard.exportReport('ml-analytics')">
                                     <i class="fas fa-download me-1"></i>Export Insights
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="enterpriseDashboard.runSystemCheck()">
                                     <i class="fas fa-refresh me-1"></i>Refresh Models
                                 </button>
                             </div>
-                            <button type="button" class="btn btn-sm btn-primary">
+                            <button type="button" class="btn btn-sm btn-primary" onclick="enterpriseDashboard.generateReport('prediction')">
                                 <i class="fas fa-plus me-1"></i>New Prediction
                             </button>
                         </div>
