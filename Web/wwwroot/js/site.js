@@ -1745,6 +1745,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Create global function wrappers for onclick handlers
     window.showSection = function(sectionName) {
+        console.log('showSection called with:', sectionName);
         if (window.enterpriseDashboard) {
             window.enterpriseDashboard.showSection(sectionName);
         }
@@ -1752,8 +1753,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // System Health Functions
     window.runSystemCheck = function() {
+        console.log('runSystemCheck called');
         if (window.enterpriseDashboard) {
             window.enterpriseDashboard.runSystemCheck();
+        } else {
+            console.error('enterpriseDashboard not available');
         }
     };
 
@@ -1821,8 +1825,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Automation Functions
     window.createAutomationJob = function() {
+        console.log('createAutomationJob called');
         if (window.enterpriseDashboard) {
             window.enterpriseDashboard.createAutomationJob();
+        } else {
+            console.error('enterpriseDashboard not available');
         }
     };
 
@@ -1883,4 +1890,16 @@ document.addEventListener('DOMContentLoaded', function() {
             window.enterpriseDashboard.exportReport(reportType);
         }
     };
+
+    // Test function to verify everything is working
+    window.testFunction = function() {
+        console.log('testFunction called - everything is working!');
+        if (window.enterpriseDashboard) {
+            window.enterpriseDashboard.showNotification('Test function called successfully!', 'success');
+        }
+    };
+
+    // Log that all functions have been created
+    console.log('All global functions created successfully');
+    console.log('Available functions:', Object.keys(window).filter(key => typeof window[key] === 'function' && key.startsWith('run') || key.startsWith('create') || key.startsWith('show')));
 });
