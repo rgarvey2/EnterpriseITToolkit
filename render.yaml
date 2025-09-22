@@ -1,5 +1,5 @@
 # Render deployment configuration for Enterprise IT Toolkit
-# This file configures all services for deployment on Render
+# This file configures the web service for deployment on Render
 
 services:
   # Web Frontend Service
@@ -17,66 +17,3 @@ services:
         value: production
       - key: API_URL
         value: https://enterprise-toolkit-api.onrender.com
-
-  # API Backend Service
-  - type: web
-    name: enterprise-toolkit-api
-    runtime: dotnet
-    buildCommand: dotnet restore && dotnet publish -c Release -o ./publish
-    startCommand: dotnet ./publish/EnterpriseITToolkit.dll
-    plan: starter
-    envVars:
-      - key: ASPNETCORE_ENVIRONMENT
-        value: Production
-      - key: ASPNETCORE_URLS
-        value: http://0.0.0.0:10000
-      - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: enterprise-toolkit-db
-          property: connectionString
-      - key: ConnectionStrings__Redis
-        fromService:
-          type: redis
-          name: enterprise-toolkit-redis
-          property: connectionString
-      - key: JWT__SecretKey
-        generateValue: true
-      - key: JWT__Issuer
-        value: EnterpriseITToolkit
-      - key: JWT__Audience
-        value: EnterpriseITToolkit-Users
-      - key: API__RateLimit__RequestsPerMinute
-        value: "100"
-      - key: API__Cors__AllowedOrigins
-        value: "https://enterprise-toolkit-web.onrender.com,https://enterprise-toolkit.onrender.com"
-
-  # Background Worker Service
-  - type: worker
-    name: enterprise-toolkit-worker
-    runtime: dotnet
-    buildCommand: dotnet restore && dotnet publish -c Release -o ./publish
-    startCommand: dotnet ./publish/EnterpriseITToolkit.Worker.dll
-    plan: starter
-    envVars:
-      - key: ASPNETCORE_ENVIRONMENT
-        value: Production
-      - key: ConnectionStrings__DefaultConnection
-        fromDatabase:
-          name: enterprise-toolkit-db
-          property: connectionString
-      - key: ConnectionStrings__Redis
-        fromService:
-          type: redis
-          name: enterprise-toolkit-redis
-          property: connectionString
-
-databases:
-  # PostgreSQL Database
-  - name: enterprise-toolkit-db
-    databaseName: enterprise_toolkit
-    user: enterprise_toolkit_user
-    plan: starter
-
-  # Redis Cache
-  - name: enterprise-toolkit-redis
-    plan: starter
