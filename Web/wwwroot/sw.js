@@ -1,11 +1,11 @@
 // Simple Service Worker for Enterprise IT Toolkit
-const CACHE_NAME = 'enterprise-toolkit-v1';
+const CACHE_NAME = 'enterprise-toolkit-v2';
 const urlsToCache = [
     '/',
-    '/index.html',
-    './main.js',
-    './secureAuth.js',
-    './styles.js'
+    '/desktop-integrated.html',
+    '/manifest.json',
+    '/favicon.ico',
+    '/js/site.js'
 ];
 
 // Install event

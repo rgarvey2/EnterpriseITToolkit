@@ -4030,5 +4030,36 @@ Ready for system administration tasks.
         window.configureEncryption = configureEncryption;
     </script>
     <script src="js/site.js"></script>
+    
+    <!-- Debug script to verify functions are loaded -->
+    <script>
+        // Debug: Check if functions are properly loaded
+        console.log('🔍 Debug: Checking function availability...');
+        console.log('createAutomationJob defined:', typeof createAutomationJob);
+        console.log('generateReport defined:', typeof generateReport);
+        console.log('showSection defined:', typeof showSection);
+        
+        // Force clear any cached versions
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister();
+                    console.log('🗑️ Unregistered service worker:', registration.scope);
+                }
+            });
+        }
+        
+        // Clear all caches
+        if ('caches' in window) {
+            caches.keys().then(function(cacheNames) {
+                return Promise.all(
+                    cacheNames.map(function(cacheName) {
+                        console.log('🗑️ Deleting cache:', cacheName);
+                        return caches.delete(cacheName);
+                    })
+                );
+            });
+        }
+    </script>
 </body>
 </html>
