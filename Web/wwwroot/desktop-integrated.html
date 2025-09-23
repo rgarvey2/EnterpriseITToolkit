@@ -1532,12 +1532,12 @@ Ready for system administration tasks.
             
         // Detect environment and configure API URL
         if (window.location.hostname.includes('onrender.com')) {
-            // Use the Render API server URL
-            apiBaseUrl = 'https://enterprise-toolkit-api.onrender.com/api';
+            // Use the Render API server URL with the correct suffix
+            apiBaseUrl = 'https://enterprise-toolkit-api-8d1l.onrender.com/api';
             console.log('Render environment detected - using Render API server:', apiBaseUrl);
             
             // Test API connection
-            fetch('https://enterprise-toolkit-api.onrender.com/health')
+            fetch('https://enterprise-toolkit-api-8d1l.onrender.com/health')
                 .then(response => {
                     if (response.ok) {
                         console.log('✅ API server is accessible');

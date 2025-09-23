@@ -29,6 +29,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: API_URL
-        value: https://enterprise-toolkit-api.onrender.com
+        value: https://enterprise-toolkit-api-8d1l.onrender.com
       - key: RENDER_MODE
         value: production
