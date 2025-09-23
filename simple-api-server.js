@@ -321,7 +321,7 @@ app.head('/', (req, res) => {
 });
 
 // Handle any missing endpoints to prevent 403 errors
-app.get('*', (req, res) => {
+app.use((req, res) => {
     console.log('Missing endpoint requested:', req.path);
     res.json({
         error: 'Endpoint not found',

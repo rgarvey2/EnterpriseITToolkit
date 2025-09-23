@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Enterprise IT Toolkit v4.0 - Web Edition</title>
+    <link rel="manifest" href="manifest.json">
     <!-- Cache bust: API connection fix -->
     
     <!-- External Resources -->
@@ -4004,6 +4005,65 @@ Ready for system administration tasks.
         window.configureWindows11Features = configureWindows11Features;
         window.manageWindows11Updates = manageWindows11Updates;
         window.backupWindows11Settings = backupWindows11Settings;
+        
+        // System Health functions
+        window.runSystemCheck = runSystemCheck;
+        window.runFullDiagnostics = runFullDiagnostics;
+        window.generateReport = generateReport;
+        window.scheduleReport = scheduleReport;
+        window.exportReport = exportReport;
+        window.emailReport = emailReport;
+        window.viewReportHistory = viewReportHistory;
+        
+        // Network Tools functions
+        window.runPingTest = runPingTest;
+        window.runTraceroute = runTraceroute;
+        window.runSpeedTest = runSpeedTest;
+        window.viewNetworkAdapters = viewNetworkAdapters;
+        window.flushDNSCache = flushDNSCache;
+        window.resetNetworkStack = resetNetworkStack;
+        window.checkFirewallRules = checkFirewallRules;
+        window.runPortScanner = runPortScanner;
+        
+        // Security functions
+        window.runSecurityScan = runSecurityScan;
+        window.checkFirewallStatus = checkFirewallStatus;
+        window.scanForMalware = scanForMalware;
+        window.updateSecurityDefinitions = updateSecurityDefinitions;
+        window.configureFirewall = configureFirewall;
+        window.manageUserAccounts = manageUserAccounts;
+        window.auditSystemLogs = auditSystemLogs;
+        window.encryptSensitiveData = encryptSensitiveData;
+        
+        // Enterprise Automation functions
+        window.createAutomationJob = createAutomationJob;
+        window.scheduleTask = scheduleTask;
+        window.runBatchScript = runBatchScript;
+        window.deploySoftware = deploySoftware;
+        window.manageWorkflows = manageWorkflows;
+        window.monitorAutomation = monitorAutomation;
+        window.backupConfigurations = backupConfigurations;
+        window.viewAutomationLogs = viewAutomationLogs;
+        
+        // ML Analytics functions
+        window.predictSystemFailure = predictSystemFailure;
+        window.analyzePerformanceTrends = analyzePerformanceTrends;
+        window.detectSecurityThreats = detectSecurityThreats;
+        window.optimizeResourceUsage = optimizeResourceUsage;
+        window.trainMLModel = trainMLModel;
+        window.deployMLModel = deployMLModel;
+        window.monitorMLPerformance = monitorMLPerformance;
+        window.exportMLData = exportMLData;
+        
+        // Settings functions
+        window.configureGeneralSettings = configureGeneralSettings;
+        window.configureNotifications = configureNotifications;
+        window.configureBackupSettings = configureBackupSettings;
+        window.configureLoggingSettings = configureLoggingSettings;
+        window.manageUserAccounts = manageUserAccounts;
+        window.configureAccessControl = configureAccessControl;
+        window.configureAuditSettings = configureAuditSettings;
+        window.configureEncryptionSettings = configureEncryptionSettings;
     </script>
     <script src="js/site.js"></script>
 </body>

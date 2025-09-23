@@ -2,7 +2,7 @@
 # This file configures the web service for deployment on Render
 
 services:
-  # Web Frontend Service
+  # Web Frontend Service (Static Site)
   - type: web
     name: enterprise-toolkit-web
     env: static
@@ -16,4 +16,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: API_URL
-        value: https://enterprise-toolkit-api.onrender.com
+        value: /api
+      - key: DOCKER_API_URL
+        value: http://localhost:5004
