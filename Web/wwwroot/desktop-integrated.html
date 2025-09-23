@@ -532,6 +532,16 @@ Ready for system administration tasks.
                 <h2><i class="fas fa-tachometer-alt me-2"></i>Dashboard</h2>
                 <p>Welcome to the Enterprise IT Toolkit Web Edition. Select a function from the left panel or use the navigation tabs above.</p>
                 
+                <!-- Test Button -->
+                <div class="mb-3">
+                    <button class="btn btn-success" onclick="testFunction()">
+                        <i class="fas fa-check me-2"></i>Test Functions
+                    </button>
+                    <button class="btn btn-primary" onclick="createAutomationJob()">
+                        <i class="fas fa-plus me-2"></i>Test Automation Job
+                    </button>
+                </div>
+                
                 <!-- Docker Services Status -->
                 <div class="remote-execution" style="margin-bottom: 20px;">
                     <h4><i class="fas fa-docker me-2"></i>Docker Services Status</h4>
@@ -3951,6 +3961,12 @@ Ready for system administration tasks.
             }, 2000);
         }
 
+        // Simple test function to verify everything is working
+        function testFunction() {
+            alert('Test function works! All functions are properly loaded.');
+            console.log('✅ Test function executed successfully');
+        }
+
         // All function declarations - single clean set
         window.showSection = showSection;
         window.executeOnTarget = executeOnTarget;
@@ -4028,9 +4044,8 @@ Ready for system administration tasks.
         window.configureAccessControl = configureAccessControl;
         window.configureAuditSettings = configureAuditSettings;
         window.configureEncryption = configureEncryption;
+        window.testFunction = testFunction;
     </script>
-    <script src="js/site.js"></script>
-    
     <!-- Debug script to verify functions are loaded -->
     <script>
         // Debug: Check if functions are properly loaded
@@ -4089,5 +4104,8 @@ Ready for system administration tasks.
             }
         }, 2000);
     </script>
+    
+    <!-- Load site.js after all functions are defined -->
+    <script src="js/site.js"></script>
 </body>
 </html>
