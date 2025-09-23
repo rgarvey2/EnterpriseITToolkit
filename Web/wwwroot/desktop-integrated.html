@@ -1535,9 +1535,13 @@ Ready for system administration tasks.
             // Use the Render API server URL with the correct suffix
             apiBaseUrl = 'https://enterprise-toolkit-api-8d1l.onrender.com/api';
             console.log('Render environment detected - using Render API server:', apiBaseUrl);
+        } else if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            // Use local Docker API server
+            apiBaseUrl = 'http://localhost:3000/api';
+            console.log('Local Docker environment detected - using local API server:', apiBaseUrl);
             
             // Test API connection
-            fetch('https://enterprise-toolkit-api-8d1l.onrender.com/health')
+            fetch('http://localhost:3000/health')
                 .then(response => {
                     if (response.ok) {
                         console.log('✅ API server is accessible');
