@@ -1,12 +1,15 @@
 #!/bin/bash
 
-# Production Deployment Script
-# This script deploys the Enterprise IT Toolkit to production
+# Enterprise IT Toolkit - TechEntTools.com Deployment Script
+# This script deploys the Enterprise IT Toolkit to app.techenttools.com
 
 set -e
 
-echo "🚀 Enterprise IT Toolkit - Production Deployment"
-echo "================================================"
+echo "🚀 Enterprise IT Toolkit - TechEntTools.com Deployment"
+echo "======================================================"
+echo "🌐 Domain: app.techenttools.com"
+echo "📧 Email: admin@techenttools.com"
+echo ""
 
 # Check if Docker is running
 if ! docker info > /dev/null 2>&1; then
@@ -25,11 +28,25 @@ fi
 echo "📋 Loading production environment..."
 export $(cat production.env | grep -v '^#' | xargs)
 
-# Generate SSL certificates if they don't exist
-if [ ! -f "nginx/ssl/cert.pem" ] || [ ! -f "nginx/ssl/key.pem" ]; then
-    echo "🔐 SSL certificates not found. Generating self-signed certificates..."
+# Generate SSL certificates for app.techenttools.com
+echo "🔐 Setting up SSL certificates for app.techenttools.com..."
+
+# Check if Let's Encrypt certificates exist
+if [ -f "/etc/letsencrypt/live/app.techenttools.com/fullchain.pem" ]; then
+    echo "✅ Let's Encrypt certificates found, copying to nginx/ssl/"
+    sudo cp "/etc/letsencrypt/live/app.techenttools.com/fullchain.pem" ./nginx/ssl/cert.pem
+    sudo cp "/etc/letsencrypt/live/app.techenttools.com/privkey.pem" ./nginx/ssl/key.pem
+    sudo chown $(whoami):$(whoami) ./nginx/ssl/cert.pem ./nginx/ssl/key.pem
+    chmod 644 ./nginx/ssl/cert.pem
+    chmod 600 ./nginx/ssl/key.pem
+else
+    echo "⚠️  Let's Encrypt certificates not found."
+    echo "🔐 Generating self-signed certificates for app.techenttools.com..."
     chmod +x scripts/generate-ssl.sh
     ./scripts/generate-ssl.sh app.techenttools.com
+    echo ""
+    echo "⚠️  IMPORTANT: For production, set up Let's Encrypt certificates:"
+    echo "   ./scripts/setup-letsencrypt.sh app.techenttools.com admin@techenttools.com"
 fi
 
 # Create necessary directories
@@ -72,8 +89,8 @@ else
 fi
 
 echo ""
-echo "🎉 Production deployment completed!"
-echo "=================================="
+echo "🎉 TechEntTools.com deployment completed!"
+echo "========================================"
 echo ""
 echo "🌐 Access URLs:"
 echo "   • Web Application: https://app.techenttools.com"
@@ -95,8 +112,13 @@ echo "   • Stop: docker-compose -f docker-compose.production.yml down"
 echo "   • Restart: docker-compose -f docker-compose.production.yml restart"
 echo "   • Update: docker-compose -f docker-compose.production.yml pull && docker-compose -f docker-compose.production.yml up -d"
 echo ""
-echo "⚠️  Security Notes:"
-echo "   • Change all default passwords in production.env"
-echo "   • Use Let's Encrypt for SSL certificates in production"
-echo "   • Configure firewall rules"
-echo "   • Enable monitoring and alerting"
+echo "⚠️  Next Steps:"
+echo "   1. Configure DNS: Point app.techenttools.com to this server's IP"
+echo "   2. Set up Let's Encrypt: ./scripts/setup-letsencrypt.sh app.techenttools.com admin@techenttools.com"
+echo "   3. Change default passwords in production.env"
+echo "   4. Configure firewall rules"
+echo "   5. Set up monitoring and alerting"
+echo ""
+echo "🔧 DNS Configuration Required:"
+echo "   A Record: app.techenttools.com → $(curl -s ifconfig.me)"
+echo "   CNAME: www.app.techenttools.com → app.techenttools.com"

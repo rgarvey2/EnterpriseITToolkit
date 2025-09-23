@@ -40,7 +40,7 @@ chmod +x scripts/generate-ssl.sh
 #### Option B: Let's Encrypt (Production)
 ```bash
 chmod +x scripts/setup-letsencrypt.sh
-./scripts/setup-letsencrypt.sh yourdomain.com admin@yourdomain.com
+./scripts/setup-letsencrypt.sh app.techenttools.com admin@techenttools.com
 ```
 
 ### 4. Deploy to Production
@@ -69,13 +69,13 @@ chmod +x scripts/deploy-production.sh
 
 | Service | Port | Description | Access |
 |---------|------|-------------|---------|
-| Nginx | 80, 443 | Web server with SSL termination | https://yourdomain.com |
-| API Server | 5004 | REST API backend | http://yourdomain.com:5004 |
+| Nginx | 80, 443 | Web server with SSL termination | https://app.techenttools.com |
+| API Server | 5004 | REST API backend | http://app.techenttools.com:5004 |
 | PostgreSQL | 5432 | Primary database | Internal only |
 | Redis | 6379 | Caching and sessions | Internal only |
-| Grafana | 3000 | Monitoring dashboard | https://yourdomain.com/grafana |
-| Prometheus | 9090 | Metrics collection | https://yourdomain.com/prometheus |
-| PHP Admin | 8080 | Database administration | https://yourdomain.com/admin |
+| Grafana | 3000 | Monitoring dashboard | https://app.techenttools.com/grafana |
+| Prometheus | 9090 | Metrics collection | https://app.techenttools.com/prometheus |
+| PHP Admin | 8080 | Database administration | https://app.techenttools.com/admin |
 
 ## 🔐 Security Configuration
 
@@ -88,7 +88,7 @@ chmod +x scripts/deploy-production.sh
 
 2. **Let's Encrypt** (Production):
    ```bash
-   ./scripts/setup-letsencrypt.sh yourdomain.com admin@yourdomain.com
+   ./scripts/setup-letsencrypt.sh app.techenttools.com admin@techenttools.com
    ```
 
 ### Firewall Configuration
@@ -127,11 +127,11 @@ docker-compose -f docker-compose.production.yml logs -f api-server
 
 ### Access Monitoring
 
-- **Grafana**: https://yourdomain.com/grafana
+- **Grafana**: https://app.techenttools.com/grafana
   - Username: `admin`
   - Password: `$GRAFANA_PASSWORD`
 
-- **Prometheus**: https://yourdomain.com/prometheus
+- **Prometheus**: https://app.techenttools.com/prometheus
 
 ### Health Checks
 
@@ -140,10 +140,10 @@ docker-compose -f docker-compose.production.yml logs -f api-server
 docker-compose -f docker-compose.production.yml ps
 
 # Test API health
-curl https://yourdomain.com/api/health
+curl https://app.techenttools.com/api/health
 
 # Test web server
-curl https://yourdomain.com/health
+curl https://app.techenttools.com/health
 ```
 
 ## 🔄 Backup and Recovery
