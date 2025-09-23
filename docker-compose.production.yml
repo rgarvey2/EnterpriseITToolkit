@@ -1,0 +1,210 @@
+version: '3.8'
+
+services:
+  # Web Server (Nginx) - Production Ready
+  web-server:
+    image: nginx:alpine
+    container_name: enterprise-web-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Web/wwwroot:/usr/share/nginx/html:ro
+      - ./nginx/nginx.production.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - api-server
+    networks:
+      - enterprise-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # API Server - Production Ready
+  api-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: enterprise-api-server
+    restart: unless-stopped
+    ports:
+      - "5004:5003"
+    environment:
+      - NODE_ENV=production
+      - PORT=5003
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=enterprise_toolkit
+      - DB_USER=enterprise_user
+      - DB_PASSWORD=${DB_PASSWORD:-enterprise_secure_password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=${JWT_SECRET:-your-super-secure-jwt-secret-key}
+      - API_RATE_LIMIT=1000
+    volumes:
+      - ./logs/api:/app/logs
+      - ./data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - enterprise-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL Database - Production Ready
+  postgres:
+    image: postgres:15-alpine
+    container_name: enterprise-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=enterprise_toolkit
+      - POSTGRES_USER=enterprise_user
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-enterprise_secure_password}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d:ro
+      - ./logs/postgres:/var/log/postgresql
+    networks:
+      - enterprise-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U enterprise_user -d enterprise_toolkit"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Cache - Production Ready
+  redis:
+    image: redis:7-alpine
+    container_name: enterprise-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_secure_password}
+    volumes:
+      - redis_data:/data
+      - ./logs/redis:/var/log/redis
+    networks:
+      - enterprise-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PHP Admin Panel - Production Ready
+  phpadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: enterprise-phpadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=postgres
+      - PMA_PORT=5432
+      - PMA_USER=enterprise_user
+      - PMA_PASSWORD=${DB_PASSWORD:-enterprise_secure_password}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD:-enterprise_secure_password}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - enterprise-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Grafana Monitoring - Production Ready
+  grafana:
+    image: grafana/grafana:latest
+    container_name: enterprise-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin_secure_password}
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - enterprise-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Prometheus Monitoring - Production Ready
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: enterprise-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - enterprise-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backup Service - Production Ready
+  backup:
+    image: postgres:15-alpine
+    container_name: enterprise-backup
+    restart: "no"
+    environment:
+      - PGPASSWORD=${DB_PASSWORD:-enterprise_secure_password}
+    volumes:
+      - ./backups:/backups
+      - ./scripts/backup.sh:/backup.sh:ro
+    command: /bin/sh -c "while true; do sleep 86400; /backup.sh; done"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - enterprise-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  grafana_data:
+    driver: local
+  prometheus_data:
+    driver: local
+
+networks:
+  enterprise-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
