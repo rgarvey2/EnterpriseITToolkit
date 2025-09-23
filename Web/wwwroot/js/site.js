@@ -292,7 +292,9 @@ class EnterpriseDashboard {
 
     async loadNetworkData() {
         try {
-            const adapters = await this.getNetworkAdapters();
+            const response = await this.getNetworkAdapters();
+            // Extract adapters array from response object
+            const adapters = response && response.adapters ? response.adapters : [];
             this.updateNetworkSection(adapters);
         } catch (error) {
             console.error('Error loading network data:', error);
