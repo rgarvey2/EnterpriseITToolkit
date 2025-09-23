@@ -5,13 +5,13 @@ const port = 5003;
 
 // Enable CORS for all origins
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:8081', 'https://enterprise-toolkit-web.onrender.com'],
+    origin: ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:8081', 'http://localhost:8082', 'https://enterprise-toolkit-web.onrender.com'],
     credentials: true
 }));
 
 app.use(express.json());
 
-// Root endpoint - MUST be first
+// Root endpoint
 app.get('/', (req, res) => {
     console.log('Root endpoint hit');
     res.json({
@@ -24,265 +24,17 @@ app.get('/', (req, res) => {
             'GET /health',
             'GET /api/system/health',
             'GET /api/system/performance',
-            'GET /api/network/adapters'
+            'GET /api/network/adapters',
+            'GET /api/phpadmin/status',
+            'GET /api/database/status',
+            'GET /api/cache/status',
+            'GET /api/monitoring/status'
         ],
         testCredentials: {
             username: 'admin',
             password: 'admin123'
         }
     });
-});
-
-// Simple authentication endpoint
-app.post('/api/auth/login', (req, res) => {
-    const { username, password } = req.body;
-    
-    console.log('Login attempt:', { username, password });
-    
-    // Simple authentication check
-    if (username === 'admin' && password === 'admin123') {
-        res.json({
-            success: true,
-            sessionToken: 'mock-session-token-' + Date.now(),
-            username: 'admin',
-            roles: ['admin'],
-            expiresAt: new Date(Date.now() + 3600000).toISOString()
-        });
-    } else {
-        res.status(401).json({
-            error: 'Invalid credentials',
-            requiresMfa: false
-        });
-    }
-});
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-    res.json({ status: 'healthy', timestamp: new Date().toISOString() });
-});
-
-// System health endpoint
-app.get('/api/system/health', (req, res) => {
-    res.json({
-        overallHealth: 98.5,
-        checks: [
-            { name: 'CPU', status: 'Healthy' },
-            { name: 'Memory', status: 'Healthy' },
-            { name: 'Disk', status: 'Healthy' },
-            { name: 'Network', status: 'Healthy' }
-        ]
-    });
-});
-
-// Performance metrics endpoint
-app.get('/api/system/performance', (req, res) => {
-    res.json({
-        overallScore: 94.2,
-        cpuUsage: 45.2,
-        memoryUsage: 67.8,
-        diskUsage: 34.5,
-        networkUsage: 32.1
-    });
-});
-
-// Network adapters endpoint
-app.get('/api/network/adapters', (req, res) => {
-    res.json([
-        {
-            name: 'Ethernet',
-            status: 'Up',
-            ipAddresses: ['192.168.1.100'],
-            description: 'Primary network adapter'
-        }
-    ]);
-});
-
-// Remote execution endpoint
-app.post('/api/remote/execute', (req, res) => {
-    const { target, function: functionName } = req.body;
-    
-    console.log(`Remote execution request: ${functionName} on ${target}`);
-    
-    // Simulate remote execution
-    const results = {
-        success: true,
-        target: target,
-        function: functionName,
-        timestamp: new Date().toISOString(),
-        results: simulateRemoteExecution(functionName, target)
-    };
-    
-    res.json(results);
-});
-
-// Remote connection endpoint
-app.post('/api/remote/connect', (req, res) => {
-    const { target } = req.body;
-    
-    console.log(`Remote connection request to: ${target}`);
-    
-    // Simulate connection
-    const connection = {
-        success: true,
-        target: target,
-        connected: true,
-        timestamp: new Date().toISOString(),
-        systemInfo: {
-            hostname: target,
-            os: 'Windows 11 Pro',
-            architecture: 'x64',
-            uptime: '2 days, 14 hours',
-            users: ['Administrator', 'Ryan Gurary']
-        }
-    };
-    
-    res.json(connection);
-});
-
-// System health endpoint with more details
-app.get('/api/system/health', (req, res) => {
-    res.json({
-        overallHealth: 98.5,
-        cpuUsage: Math.floor(Math.random() * 30) + 20, // 20-50%
-        memoryUsage: (Math.random() * 2 + 7).toFixed(1), // 7-9 GB
-        diskUsage: Math.floor(Math.random() * 100) + 200, // 200-300 GB
-        networkStatus: 'Connected',
-        checks: [
-            { name: 'CPU', status: 'Healthy', value: '25%' },
-            { name: 'Memory', status: 'Healthy', value: '8.2 GB / 16 GB' },
-            { name: 'Disk', status: 'Healthy', value: '250 GB / 500 GB' },
-            { name: 'Network', status: 'Healthy', value: 'Connected' }
-        ]
-    });
-});
-
-// Software inventory endpoint
-app.get('/api/software/inventory', (req, res) => {
-    res.json({
-        totalApplications: 45,
-        applications: [
-            { name: 'Microsoft Office 365', version: '16.0.14326.20404', publisher: 'Microsoft Corporation' },
-            { name: 'Google Chrome', version: '117.0.5938.132', publisher: 'Google LLC' },
-            { name: 'Visual Studio Code', version: '1.82.2', publisher: 'Microsoft Corporation' },
-            { name: 'Adobe Acrobat Reader', version: '23.006.20320', publisher: 'Adobe Inc.' },
-            { name: 'Windows Security', version: '4.18.23080.1004', publisher: 'Microsoft Corporation' }
-        ]
-    });
-});
-
-// Network test endpoint
-app.get('/api/network/test', (req, res) => {
-    res.json({
-        ping: {
-            google: { host: '8.8.8.8', time: '12ms', status: 'Success' },
-            cloudflare: { host: '1.1.1.1', time: '8ms', status: 'Success' }
-        },
-        dns: {
-            primary: '8.8.8.8',
-            secondary: '8.8.4.4',
-            status: 'Resolving'
-        },
-        connectivity: 'All tests passed'
-    });
-});
-
-// Security check endpoint
-app.get('/api/security/check', (req, res) => {
-    res.json({
-        antivirus: { status: 'Active', definition: 'Up to date', lastScan: '2 hours ago' },
-        firewall: { status: 'Enabled', rules: 15, blocked: 0 },
-        windowsUpdate: { status: 'Up to date', lastCheck: '1 day ago' },
-        vulnerabilities: { critical: 0, high: 0, medium: 2, low: 5 },
-        overall: 'Secure'
-    });
-});
-
-// Function to simulate remote execution
-function simulateRemoteExecution(functionName, target) {
-    const simulations = {
-        'system-health': {
-            cpu: '25%',
-            memory: '8.2 GB / 16 GB',
-            disk: '250 GB / 500 GB',
-            network: 'Connected',
-            status: 'All systems operational'
-        },
-        'software-inventory': {
-            totalApplications: 45,
-            lastUpdated: new Date().toISOString(),
-            status: 'Inventory complete'
-        },
-        'network-test': {
-            ping: '12ms',
-            dns: 'Resolving',
-            connectivity: 'All tests passed'
-        },
-        'optimize-system': {
-            tempFilesCleared: '2.3 GB',
-            startupPrograms: 'Optimized',
-            services: 'Optimized',
-            status: 'System optimized'
-        },
-        'security-check': {
-            antivirus: 'Active',
-            firewall: 'Enabled',
-            vulnerabilities: '2 medium, 5 low',
-            status: 'Secure'
-        },
-        'backup-registry': {
-            backupLocation: 'C:\\Backups\\Registry',
-            size: '45 MB',
-            status: 'Backup completed successfully'
-        }
-    };
-    
-    return simulations[functionName] || { status: 'Function executed successfully' };
-}
-
-app.listen(port, () => {
-    console.log(`🚀 Simple API server running at http://localhost:${port}`);
-    console.log(`📋 Available endpoints:`);
-    console.log(`  • GET /`);
-    console.log(`  • POST /api/auth/login`);
-    console.log(`  • GET /health`);
-    console.log(`  • GET /api/system/health`);
-    console.log(`  • GET /api/system/performance`);
-    console.log(`  • GET /api/network/adapters`);
-    console.log(`  • POST /api/remote/execute`);
-    console.log(`  • POST /api/remote/connect`);
-    console.log(`  • GET /api/software/inventory`);
-    console.log(`  • GET /api/network/test`);
-    console.log(`  • GET /api/security/check`);
-    console.log(`\n🔐 Test credentials: admin / admin123`);
-});
-
-// Handle specific endpoints that might be requested
-app.get('/api/netif', (req, res) => {
-    console.log('Network interface endpoint requested');
-    res.json({
-        interfaces: [
-            { name: 'Ethernet', status: 'Connected', ip: '192.168.1.100' },
-            { name: 'Wi-Fi', status: 'Connected', ip: '192.168.1.101' },
-            { name: 'Bluetooth', status: 'Available', ip: 'N/A' }
-        ]
-    });
-});
-
-// Service status endpoints
-app.get('/api/phpadmin/status', (req, res) => {
-    res.json({ status: 'running', service: 'phpmyadmin', port: 8080 });
-});
-
-app.get('/api/database/status', (req, res) => {
-    res.json({ status: 'running', service: 'postgresql', port: 5432 });
-});
-
-app.get('/api/cache/status', (req, res) => {
-    res.json({ status: 'running', service: 'redis', port: 6379 });
-});
-
-app.get('/api/monitoring/status', (req, res) => {
-    res.json({ status: 'running', service: 'grafana', port: 3000 });
 });
 
 // Handle requests to port 8080 (PHP Admin Panel check)
@@ -320,6 +72,161 @@ app.head('/', (req, res) => {
     }
 });
 
+// Authentication endpoint
+app.post('/api/auth/login', (req, res) => {
+    console.log('Login attempt:', req.body);
+    const { username, password } = req.body;
+    
+    if (username === 'admin' && password === 'admin123') {
+        res.json({
+            success: true,
+            message: 'Login successful',
+            token: 'demo-token-12345',
+            user: {
+                username: 'admin',
+                role: 'administrator',
+                permissions: ['all']
+            }
+        });
+    } else {
+        res.status(401).json({
+            success: false,
+            message: 'Invalid credentials'
+        });
+    }
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// System health endpoint
+app.get('/api/system/health', (req, res) => {
+    res.json({
+        overallHealth: 98.5,
+        checks: [
+            { name: 'CPU', status: 'Healthy' },
+            { name: 'Memory', status: 'Healthy' },
+            { name: 'Disk', status: 'Healthy' },
+            { name: 'Network', status: 'Healthy' }
+        ]
+    });
+});
+
+// System performance endpoint
+app.get('/api/system/performance', (req, res) => {
+    res.json({
+        cpuUsage: Math.floor(Math.random() * 30) + 20, // 20-50%
+        memoryUsage: (Math.random() * 2 + 7).toFixed(1), // 7-9 GB
+        diskUsage: Math.floor(Math.random() * 100) + 200, // 200-300 GB
+        networkSpeed: Math.floor(Math.random() * 100) + 50 // 50-150 Mbps
+    });
+});
+
+// Network adapters endpoint
+app.get('/api/network/adapters', (req, res) => {
+    res.json({
+        adapters: [
+            {
+                name: 'Ethernet',
+                status: 'Connected',
+                speed: '1 Gbps',
+                ipAddress: '192.168.1.100'
+            },
+            {
+                name: 'Wi-Fi',
+                status: 'Connected',
+                speed: '866 Mbps',
+                ipAddress: '192.168.1.101'
+            }
+        ]
+    });
+});
+
+// Service status endpoints
+app.get('/api/phpadmin/status', (req, res) => {
+    res.json({ status: 'running', service: 'phpmyadmin', port: 8080 });
+});
+
+app.get('/api/database/status', (req, res) => {
+    res.json({ status: 'running', service: 'postgresql', port: 5432 });
+});
+
+app.get('/api/cache/status', (req, res) => {
+    res.json({ status: 'running', service: 'redis', port: 6379 });
+});
+
+app.get('/api/monitoring/status', (req, res) => {
+    res.json({ status: 'running', service: 'grafana', port: 3000 });
+});
+
+// Remote execution endpoint
+app.post('/api/remote/execute', (req, res) => {
+    const { command, target } = req.body;
+    console.log('Remote execution request:', { command, target });
+    
+    res.json({
+        success: true,
+        command: command,
+        target: target,
+        output: 'Command executed successfully (demo mode)',
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Remote connect endpoint
+app.post('/api/remote/connect', (req, res) => {
+    const { hostname, username } = req.body;
+    console.log('Remote connect request:', { hostname, username });
+    
+    res.json({
+        success: true,
+        message: 'Connected to remote machine (demo mode)',
+        hostname: hostname,
+        username: username,
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Software inventory endpoint
+app.get('/api/software/inventory', (req, res) => {
+    res.json({
+        totalApplications: 45,
+        applications: [
+            { name: 'Microsoft Office 365', version: '16.0.14326.20404', status: 'Active' },
+            { name: 'Google Chrome', version: '117.0.5938.132', status: 'Active' },
+            { name: 'Adobe Acrobat Reader', version: '23.006.20320', status: 'Active' },
+            { name: 'Visual Studio Code', version: '1.82.2', status: 'Active' }
+        ]
+    });
+});
+
+// Network test endpoint
+app.get('/api/network/test', (req, res) => {
+    res.json({
+        ping: '8ms',
+        download: '95.2 Mbps',
+        upload: '12.8 Mbps',
+        latency: '8ms',
+        status: 'Connected'
+    });
+});
+
+// Security check endpoint
+app.get('/api/security/check', (req, res) => {
+    res.json({
+        firewall: 'Enabled',
+        antivirus: 'Active',
+        updates: 'Current',
+        vulnerabilities: 0,
+        status: 'Secure'
+    });
+});
+
 // Handle any missing endpoints to prevent 403 errors
 app.use((req, res) => {
     console.log('Missing endpoint requested:', req.path);
@@ -333,7 +240,6 @@ app.use((req, res) => {
             'GET /api/system/health',
             'GET /api/system/performance',
             'GET /api/network/adapters',
-            'GET /api/netif',
             'GET /api/phpadmin/status',
             'GET /api/database/status',
             'GET /api/cache/status',
@@ -345,4 +251,22 @@ app.use((req, res) => {
             'GET /api/security/check'
         ]
     });
+});
+
+// Start server
+app.listen(port, () => {
+    console.log(`🚀 Simple API server running at http://localhost:${port}`);
+    console.log('📋 Available endpoints:');
+    console.log('  • GET /');
+    console.log('  • POST /api/auth/login');
+    console.log('  • GET /health');
+    console.log('  • GET /api/system/health');
+    console.log('  • GET /api/system/performance');
+    console.log('  • GET /api/network/adapters');
+    console.log('  • POST /api/remote/execute');
+    console.log('  • POST /api/remote/connect');
+    console.log('  • GET /api/software/inventory');
+    console.log('  • GET /api/network/test');
+    console.log('  • GET /api/security/check');
+    console.log('🔐 Test credentials: admin / admin123');
 });
