@@ -7,7 +7,7 @@ services:
     name: enterprise-toolkit-api
     env: node
     buildCommand: npm ci
-    startCommand: node simple-api-server.js
+    startCommand: node render-api-server.js
     envVars:
       - key: NODE_ENV
         value: production

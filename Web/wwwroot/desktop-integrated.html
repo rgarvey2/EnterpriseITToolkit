@@ -1522,15 +1522,9 @@ Ready for system administration tasks.
             
         // Detect environment and configure API URL
         if (window.location.hostname.includes('onrender.com')) {
-            // Check if we have an external API URL configured
-            const externalApiUrl = 'https://enterprise-toolkit-api.onrender.com';
-            if (externalApiUrl && externalApiUrl !== 'null') {
-                apiBaseUrl = externalApiUrl + '/api';
-                console.log('Render environment detected - using external API:', apiBaseUrl);
-            } else {
-                apiBaseUrl = null; // Use demo mode on Render
-                console.log('Render environment detected - using demo mode');
-            }
+            // Use the Render API server URL
+            apiBaseUrl = 'https://enterprise-toolkit-api.onrender.com/api';
+            console.log('Render environment detected - using Render API server:', apiBaseUrl);
         } else if (window.location.port === '8082' || window.location.hostname === 'localhost') {
             // Docker deployment or local development - use relative path through Nginx
             apiBaseUrl = '/api'; // Nginx proxy to Docker API server
