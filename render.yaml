@@ -16,6 +16,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: API_URL
-        value: /api
-      - key: DOCKER_API_URL
-        value: http://localhost:5004
+        value: null
+      - key: RENDER_MODE
+        value: static

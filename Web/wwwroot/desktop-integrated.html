@@ -1521,7 +1521,8 @@ Ready for system administration tasks.
             setInterval(updateSystemMetrics, 5000);
             
         // Detect environment and configure API URL
-        if (window.location.hostname.includes('onrender.com')) {
+        if (window.location.hostname.includes('onrender.com') || 
+            (typeof process !== 'undefined' && process.env && process.env.RENDER_MODE === 'static')) {
             apiBaseUrl = null; // Use demo mode on Render
         } else if (window.location.port === '8082' || window.location.hostname === 'localhost') {
             // Docker deployment or local development - use relative path through Nginx
@@ -4064,6 +4065,101 @@ Ready for system administration tasks.
         window.configureAccessControl = configureAccessControl;
         window.configureAuditSettings = configureAuditSettings;
         window.configureEncryptionSettings = configureEncryptionSettings;
+        
+        // Navigation functions
+        window.showSection = showSection;
+        
+        // Dashboard functions
+        window.executeOnTarget = executeOnTarget;
+        window.runSystemCheck = runSystemCheck;
+        window.runSoftwareInventory = runSoftwareInventory;
+        window.runNetworkDiagnostics = runNetworkDiagnostics;
+        window.optimizeSystem = optimizeSystem;
+        window.runSecurityScan = runSecurityScan;
+        window.backupRegistry = backupRegistry;
+        
+        // System Health functions
+        window.runSystemHealthCheck = runSystemHealthCheck;
+        window.checkSystemPerformance = checkSystemPerformance;
+        window.checkSystemResources = checkSystemResources;
+        window.checkSystemServices = checkSystemServices;
+        window.cleanSystemFiles = cleanSystemFiles;
+        window.defragmentDisk = defragmentDisk;
+        window.checkDiskHealth = checkDiskHealth;
+        window.optimizeSystemPerformance = optimizeSystemPerformance;
+        
+        // Network Tools functions
+        window.runPingTest = runPingTest;
+        window.runTraceroute = runTraceroute;
+        window.runSpeedTest = runSpeedTest;
+        window.checkNetworkAdapters = checkNetworkAdapters;
+        window.flushDNS = flushDNS;
+        window.resetNetworkStack = resetNetworkStack;
+        window.checkFirewallRules = checkFirewallRules;
+        window.scanNetworkPorts = scanNetworkPorts;
+        
+        // Security functions
+        window.runFullSecurityScan = runFullSecurityScan;
+        window.runVulnerabilityScan = runVulnerabilityScan;
+        window.runMalwareScan = runMalwareScan;
+        window.runFirewallCheck = runFirewallCheck;
+        window.enableWindowsDefender = enableWindowsDefender;
+        window.configureFirewall = configureFirewall;
+        window.updateSecurityPolicies = updateSecurityPolicies;
+        window.checkSecurityUpdates = checkSecurityUpdates;
+        
+        // Windows 11 Manager functions
+        window.checkWin11Compatibility = checkWin11Compatibility;
+        window.downloadWin11 = downloadWin11;
+        window.createWin11Media = createWin11Media;
+        window.upgradeToWin11 = upgradeToWin11;
+        window.optimizeWin11 = optimizeWin11;
+        window.configureWin11Features = configureWin11Features;
+        window.manageWin11Updates = manageWin11Updates;
+        window.backupWin11Settings = backupWin11Settings;
+        
+        // Enterprise Automation functions
+        window.createAutomationJob = createAutomationJob;
+        window.scheduleAutomation = scheduleAutomation;
+        window.runBatchScript = runBatchScript;
+        window.deploySoftware = deploySoftware;
+        window.deploySelectedSoftware = deploySelectedSoftware;
+        window.showDeploymentHistory = showDeploymentHistory;
+        window.configureDeploymentSettings = configureDeploymentSettings;
+        window.manageWorkflows = manageWorkflows;
+        window.monitorAutomation = monitorAutomation;
+        window.backupAutomation = backupAutomation;
+        window.viewAutomationLogs = viewAutomationLogs;
+        
+        // ML Analytics functions
+        window.predictSystemFailure = predictSystemFailure;
+        window.analyzePerformanceTrends = analyzePerformanceTrends;
+        window.predictSecurityThreats = predictSecurityThreats;
+        window.optimizeResourceUsage = optimizeResourceUsage;
+        window.trainMLModel = trainMLModel;
+        window.deployMLModel = deployMLModel;
+        window.monitorMLPerformance = monitorMLPerformance;
+        window.exportMLData = exportMLData;
+        
+        // Reports functions
+        window.generateSystemHealthReport = generateSystemHealthReport;
+        window.generateSecurityReport = generateSecurityReport;
+        window.generateNetworkReport = generateNetworkReport;
+        window.generatePerformanceReport = generatePerformanceReport;
+        window.scheduleReport = scheduleReport;
+        window.exportReport = exportReport;
+        window.emailReport = emailReport;
+        window.viewReportHistory = viewReportHistory;
+        
+        // Settings functions
+        window.configureGeneralSettings = configureGeneralSettings;
+        window.configureNotifications = configureNotifications;
+        window.configureBackupSettings = configureBackupSettings;
+        window.configureLogging = configureLogging;
+        window.configureUserAccounts = configureUserAccounts;
+        window.configureAccessControl = configureAccessControl;
+        window.configureAuditSettings = configureAuditSettings;
+        window.configureEncryption = configureEncryption;
     </script>
     <script src="js/site.js"></script>
 </body>
