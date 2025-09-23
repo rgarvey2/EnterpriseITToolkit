@@ -3952,7 +3952,7 @@ Ready for system administration tasks.
         }
 
         // All function declarations - single clean set
-        window.showSection = showSection;
+        // showSection is handled by site.js
         window.executeOnTarget = executeOnTarget;
         window.runSystemCheck = runSystemCheck;
         window.runSoftwareInventory = runSoftwareInventory;
@@ -4080,7 +4080,7 @@ Ready for system administration tasks.
         
         // Force reload if functions are not available
         setTimeout(function() {
-            if (typeof createAutomationJob === 'undefined' || typeof showSection === 'undefined') {
+            if (typeof createAutomationJob === 'undefined') {
                 console.log('🔄 Functions not loaded, forcing page reload...');
                 window.location.reload(true);
             }
@@ -4090,11 +4090,11 @@ Ready for system administration tasks.
         setTimeout(function() {
             console.log('🔍 Final function check:');
             console.log('createAutomationJob:', typeof createAutomationJob);
-            console.log('showSection:', typeof showSection);
+            console.log('showSection:', typeof window.showSection);
             console.log('generateReport:', typeof generateReport);
             
             // If functions are still not available, try to reload the page
-            if (typeof createAutomationJob === 'undefined' || typeof showSection === 'undefined') {
+            if (typeof createAutomationJob === 'undefined') {
                 console.log('🚨 Critical: Functions still not available after 2 seconds');
                 console.log('Available functions:', Object.keys(window).filter(key => typeof window[key] === 'function'));
             }
