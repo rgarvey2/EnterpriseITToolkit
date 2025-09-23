@@ -379,47 +379,47 @@
     <div class="desktop-nav">
         <ul class="nav nav-tabs" id="mainTabs">
             <li class="nav-item">
-                <a class="nav-link active" href="#" onclick="showSection('dashboard')">
+                <a class="nav-link active" href="#" onclick="showSection('dashboard', this)">
                     <i class="fas fa-tachometer-alt me-1"></i>Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="showSection('system-health')">
+                <a class="nav-link" href="#" onclick="showSection('system-health', this)">
                     <i class="fas fa-heartbeat me-1"></i>System Health
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="showSection('network')">
+                <a class="nav-link" href="#" onclick="showSection('network', this)">
                     <i class="fas fa-network-wired me-1"></i>Network Tools
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="showSection('security')">
+                <a class="nav-link" href="#" onclick="showSection('security', this)">
                     <i class="fas fa-shield-alt me-1"></i>Security
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="showSection('windows11')">
+                <a class="nav-link" href="#" onclick="showSection('windows11', this)">
                     <i class="fas fa-windows me-1"></i>Windows 11 Manager
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="showSection('automation')">
+                <a class="nav-link" href="#" onclick="showSection('automation', this)">
                     <i class="fas fa-robot me-1"></i>Enterprise Automation
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="showSection('ml-analytics')">
+                <a class="nav-link" href="#" onclick="showSection('ml-analytics', this)">
                     <i class="fas fa-brain me-1"></i>ML Analytics
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="showSection('reports')">
+                <a class="nav-link" href="#" onclick="showSection('reports', this)">
                     <i class="fas fa-file-alt me-1"></i>Reports
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="showSection('settings')">
+                <a class="nav-link" href="#" onclick="showSection('settings', this)">
                     <i class="fas fa-cog me-1"></i>Settings
                 </a>
             </li>
@@ -1734,7 +1734,7 @@ Ready for system administration tasks.
         }
 
         // Show section content
-        function showSection(sectionName) {
+        function showSection(sectionName, clickedElement) {
             // Hide all tab contents
             const tabContents = document.querySelectorAll('.tab-content');
             tabContents.forEach(content => {
@@ -1748,12 +1748,18 @@ Ready for system administration tasks.
             });
 
             // Show selected tab content
-            document.getElementById(sectionName).style.display = 'block';
+            const targetElement = document.getElementById(sectionName);
+            if (targetElement) {
+                targetElement.style.display = 'block';
+            }
             
             // Add active class to clicked nav link
-            event.target.classList.add('active');
+            if (clickedElement) {
+                clickedElement.classList.add('active');
+            }
             
             currentSection = sectionName;
+            console.log('Switched to section:', sectionName);
             updateStatus(`Switched to ${sectionName.replace('-', ' ')}`);
         }
 
