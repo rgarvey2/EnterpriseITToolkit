@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Enterprise IT Toolkit v4.0 - Web Edition</title>
-    <link rel="manifest" href="manifest.json">
+    <!-- <link rel="manifest" href="manifest.json"> -->
     <!-- Cache bust: API connection fix -->
     
     <!-- External Resources -->
@@ -4039,7 +4039,7 @@ Ready for system administration tasks.
         console.log('generateReport defined:', typeof generateReport);
         console.log('showSection defined:', typeof showSection);
         
-        // Force clear any cached versions
+        // Completely disable service worker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
                 for(let registration of registrations) {
@@ -4047,6 +4047,12 @@ Ready for system administration tasks.
                     console.log('🗑️ Unregistered service worker:', registration.scope);
                 }
             });
+            
+            // Prevent any new service worker registration
+            navigator.serviceWorker.register = function() {
+                console.log('🚫 Service worker registration blocked');
+                return Promise.reject('Service worker disabled');
+            };
         }
         
         // Clear all caches
@@ -4060,6 +4066,28 @@ Ready for system administration tasks.
                 );
             });
         }
+        
+        // Force reload if functions are not available
+        setTimeout(function() {
+            if (typeof createAutomationJob === 'undefined' || typeof showSection === 'undefined') {
+                console.log('🔄 Functions not loaded, forcing page reload...');
+                window.location.reload(true);
+            }
+        }, 1000);
+        
+        // Additional function verification
+        setTimeout(function() {
+            console.log('🔍 Final function check:');
+            console.log('createAutomationJob:', typeof createAutomationJob);
+            console.log('showSection:', typeof showSection);
+            console.log('generateReport:', typeof generateReport);
+            
+            // If functions are still not available, try to reload the page
+            if (typeof createAutomationJob === 'undefined' || typeof showSection === 'undefined') {
+                console.log('🚨 Critical: Functions still not available after 2 seconds');
+                console.log('Available functions:', Object.keys(window).filter(key => typeof window[key] === 'function'));
+            }
+        }, 2000);
     </script>
 </body>
 </html>
