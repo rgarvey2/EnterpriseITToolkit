@@ -1,7 +1,20 @@
 # Render deployment configuration for Enterprise IT Toolkit
-# This file configures the web service for deployment on Render
+# This file configures both web and API services for deployment on Render
 
 services:
+  # API Server Service
+  - type: web
+    name: enterprise-toolkit-api
+    env: node
+    buildCommand: npm ci
+    startCommand: node simple-api-server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    healthCheckPath: /health
+
   # Web Frontend Service (Static Site)
   - type: web
     name: enterprise-toolkit-web
@@ -16,6 +29,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: API_URL
-        value: null
+        value: https://enterprise-toolkit-api.onrender.com
       - key: RENDER_MODE
-        value: static
+        value: production
