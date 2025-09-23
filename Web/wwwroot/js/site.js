@@ -204,27 +204,35 @@ class EnterpriseDashboard {
     }
 
     showSection(sectionName) {
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.classList.remove('active');
+        // Hide all tab contents
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => {
+            content.style.display = 'none';
         });
 
-        const targetSection = document.getElementById(sectionName);
-        if (targetSection) {
-            targetSection.classList.add('active');
-            this.currentSection = sectionName;
-            
-            document.querySelectorAll('.enterprise-nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            const activeLink = document.querySelector(`[onclick="showSection('${sectionName}')"]`);
-            if (activeLink) {
-                activeLink.classList.add('active');
-            }
+        // Remove active class from all nav links
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+        });
 
-            // Load section-specific data
-            this.loadSectionData(sectionName);
+        // Show selected tab content
+        const targetElement = document.getElementById(sectionName);
+        if (targetElement) {
+            targetElement.style.display = 'block';
         }
+        
+        // Add active class to clicked nav link
+        const activeLink = document.querySelector(`[onclick*="showSection('${sectionName}'"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+        
+        this.currentSection = sectionName;
+        console.log('Switched to section:', sectionName);
+        
+        // Load section-specific data
+        this.loadSectionData(sectionName);
     }
 
     async loadSectionData(sectionName) {
