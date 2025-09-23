@@ -15,19 +15,26 @@ class EnterpriseDashboard {
     }
 
     detectApiUrl() {
-        // Check if we're running on localhost (development)
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            return 'http://localhost:5003/api';
-        }
-        
         // Check if we're running on Render (production)
         if (window.location.hostname.includes('onrender.com')) {
-            // For now, use demo mode on Render since we don't have the API deployed there
+            // Use demo mode on Render since we don't have the API deployed there
             return null; // This will trigger demo mode
         }
         
-        // Default to localhost for other environments
-        return 'http://localhost:5003/api';
+        // Check if we're running on localhost with Docker (port 8082)
+        if (window.location.hostname === 'localhost' && window.location.port === '8082') {
+            // Use relative path through Nginx proxy to Docker API server
+            return '/api';
+        }
+        
+        // Check if we're running on localhost (development)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            // Use Docker API server on port 5004
+            return 'http://localhost:5004/api';
+        }
+        
+        // Default to demo mode for any other environment
+        return null;
     }
 
     init() {

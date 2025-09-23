@@ -1521,12 +1521,17 @@ Ready for system administration tasks.
             setInterval(updateSystemMetrics, 5000);
             
         // Detect environment and configure API URL
-        if (window.location.hostname.includes('onrender.com') || 
-            (typeof process !== 'undefined' && process.env && process.env.RENDER_MODE === 'static')) {
+        if (window.location.hostname.includes('onrender.com')) {
             apiBaseUrl = null; // Use demo mode on Render
+            console.log('Render environment detected - using demo mode');
         } else if (window.location.port === '8082' || window.location.hostname === 'localhost') {
             // Docker deployment or local development - use relative path through Nginx
             apiBaseUrl = '/api'; // Nginx proxy to Docker API server
+            console.log('Local/Docker environment detected - using API mode');
+        } else {
+            // Default to demo mode for any other environment
+            apiBaseUrl = null;
+            console.log('Unknown environment detected - using demo mode');
         }
         
         console.log('Environment detected:', {
