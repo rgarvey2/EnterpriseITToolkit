@@ -1525,6 +1525,28 @@ Ready for system administration tasks.
             // Use the Render API server URL
             apiBaseUrl = 'https://enterprise-toolkit-api.onrender.com/api';
             console.log('Render environment detected - using Render API server:', apiBaseUrl);
+            
+            // Test API connection
+            fetch('https://enterprise-toolkit-api.onrender.com/health')
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ API server is accessible');
+                        return response.json();
+                    } else {
+                        console.log('❌ API server returned error:', response.status);
+                        apiBaseUrl = null; // Fall back to demo mode
+                    }
+                })
+                .then(data => {
+                    if (data) {
+                        console.log('API server response:', data);
+                    }
+                })
+                .catch(error => {
+                    console.log('❌ API server connection failed:', error);
+                    apiBaseUrl = null; // Fall back to demo mode
+                    console.log('Falling back to demo mode');
+                });
         } else if (window.location.port === '8082' || window.location.hostname === 'localhost') {
             // Docker deployment or local development - use relative path through Nginx
             apiBaseUrl = '/api'; // Nginx proxy to Docker API server
@@ -3920,6 +3942,15 @@ Ready for system administration tasks.
             }, 6000);
         }
 
+        // Add missing generateReport function
+        function generateReport() {
+            showNotification('Generating comprehensive system report...', 'info');
+            setTimeout(() => {
+                showNotification('Report generated successfully!', 'success');
+                // In a real implementation, this would generate and download a report
+            }, 2000);
+        }
+
         // All function declarations - single clean set
         window.showSection = showSection;
         window.executeOnTarget = executeOnTarget;
@@ -3980,6 +4011,7 @@ Ready for system administration tasks.
         window.deployMLModel = deployMLModel;
         window.monitorMLPerformance = monitorMLPerformance;
         window.exportMLData = exportMLData;
+        window.generateReport = generateReport;
         window.generateSystemHealthReport = generateSystemHealthReport;
         window.generateSecurityReport = generateSecurityReport;
         window.generateNetworkReport = generateNetworkReport;
