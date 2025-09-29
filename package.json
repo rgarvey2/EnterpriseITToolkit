@@ -19,7 +19,7 @@
   "author": "Enterprise IT Toolkit",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
+    "express": "^5.1.0",
     "cors": "^2.8.5"
   },
   "devDependencies": {
